@@ -1,0 +1,43 @@
+# =====================================================================
+# DADOS SIGILOSOS DA PRINT MAIS — NUNCA VERSIONAR (nem com valores alterados)
+# =====================================================================
+
+# Dados reais brutos: tudo ignorado, exceto o marcador da pasta e as instruções
+dados/bruto/*
+!dados/bruto/.gitkeep
+!dados/bruto/COMO_OBTER.md
+
+# Dados processados (derivados dos reais): tudo ignorado
+dados/processado/*
+!dados/processado/.gitkeep
+
+# Planilhas/tabelas em QUALQUER lugar do repo são bloqueadas...
+*.csv
+*.tsv
+*.xlsx
+*.xlsm
+*.xls
+*.parquet
+*.feather
+*.pkl
+*.pickle
+*.joblib
+*.zip
+
+# ...exceto a amostra SINTÉTICA, que é versionada
+!dados/amostra/*.csv
+
+# Resultados gerados sobre dados reais (métricas por SKU revelam volumes de venda)
+relatorios/real/
+
+# =====================================================================
+# Python / Jupyter / ambiente
+# =====================================================================
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.env
+.vscode/
+.idea/
