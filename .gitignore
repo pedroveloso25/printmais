@@ -41,3 +41,13 @@ venv/
 .env
 .vscode/
 .idea/
+
+# =====================================================================
+# Arquivos de trabalho com informação sigilosa (tratados como dados/bruto)
+# =====================================================================
+PLANO_vinil.md
+tratar.py
+pedido_sugerido.py
+
+# Perfil gerado sobre os dados reais (revisar antes de qualquer versionamento)
+relatorios/perfil_dados.md

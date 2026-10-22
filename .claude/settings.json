@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./dados/bruto/**)",
+      "Read(./dados/processado/**)",
+      "Read(./PLANO_vinil.md)",
+      "Read(./tratar.py)",
+      "Read(./pedido_sugerido.py)"
+    ]
+  }
+}
