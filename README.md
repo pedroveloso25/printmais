@@ -84,19 +84,38 @@ colunas) com base no perfil.
 | `src/gerar_amostra.py` | gerador da amostra sintética |
 
 ## Declaração de uso de IA
-<!-- RASCUNHO gerado pelo assistente com base no que de fato aconteceu; a equipe revisa, corrige e assina. -->
-- **Ferramenta:** Claude Code (modelo Claude Opus 5.5, Anthropic), usado no terminal do projeto.
-- **O que a IA gerou:** o código de `src/` (perfil de dados, carga, preparo, partição com teste de
-  vazamento, baselines, avaliação, fluxo principal e gerador da amostra sintética), o
-  `requirements.txt`, este README e o modelo de verificação de vazamento em `docs/vazamento/`.
-- **O que a equipe fez:** definiu o problema, a regra operacional e os parâmetros (horizonte,
-  janela, quantil, cobertura), passou a lógica da regra da empresa em palavras, tomou as decisões
-  de tratamento, rodou e revisou o código, fez todos os commits e escreveu as verificações
-  individuais de vazamento.
-- **Sigilo:** a IA não recebeu linhas nem valores individuais dos dados reais. Ela só viu
-  metadados agregados (o perfil) e métricas agregadas. Arquivos de trabalho com informação
-  sigilosa foram bloqueados para leitura pela IA (`.claude/settings.json`) e ficaram fora do git.
-  **Incidente:** no início, antes do bloqueio, a IA leu o começo de três desses arquivos de
-  trabalho. O conteúdo não foi usado nem reproduzido, e as regras de bloqueio foram criadas em
-  seguida.
-- **Validação:** <!-- equipe: o que vocês conferiram à mão (ex.: teste de vazamento, métricas, leitura do código) -->
+
+**Ferramentas:** Claude (chat, Anthropic) e Claude Code (Anthropic).
+
+**Finalidade:**
+- Planejamento da entrega e definição do contrato de dados, da partição temporal e dos baselines.
+- Geração da estrutura do repositório e do código em `src/` (perfil de dados, carga, preparação,
+  partição, baselines, avaliação e pipeline).
+- Geração da amostra sintética (`src/gerar_amostra.py`).
+- Redação inicial do README e desta declaração.
+
+**Trechos influenciados:** todo o código em `src/` foi gerado com Claude Code a partir de
+especificações escritas pela equipe; a regra operacional (P75 de 6 meses, horizonte de 5 meses)
+foi descrita pela equipe a partir do processo real da empresa.
+
+**Dados e sigilo:**
+- A IA não viu linhas nem valores individuais dos dados brutos. Os scripts gerados por ela
+  foram executados localmente e ela teve acesso apenas a saídas agregadas: o perfil de
+  metadados (`src/perfil_dados.py`: nomes de colunas, tipos, contagens, intervalos de datas) e
+  métricas agregadas dos baselines (MAE, WAPE, viés, pinball, cobertura), além da amostra
+  sintética.
+- Incidente: durante a estruturação, o Claude Code leu trechos de arquivos de código e
+  planejamento da equipe que continham informações da empresa. A leitura foi bloqueada a
+  partir de então por regra de permissão em `.claude/settings.json`, e esses arquivos não
+  são versionados.
+
+**Validação:**
+- O pipeline foi executado de ponta a ponta sobre a amostra sintética (`python -m src.main`).
+- O teste de vazamento em `src/particao.py` foi verificado com uma versão propositalmente errada
+  (defasagem de 4 meses em vez de 5), e o assert falhou como esperado.
+- A equipe revisou o relatório de perfil e confirmou que ele não contém valores individuais.
+- Antes de cada commit, conferimos com `git status` que nenhum arquivo de dados era versionado.
+- A equipe revisou a lógica dos baselines e das métricas (pinball loss, taxa de cobertura) e a
+  justificativa da janela móvel.
+- A verificação individual de vazamento (`docs/vazamento/`) foi escrita por cada integrante
+  sem uso de IA.
