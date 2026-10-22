@@ -1,0 +1,167 @@
+{
+  "metricas": [
+    {
+      "baseline": "media_hist",
+      "nivel": "sku_mes",
+      "n": 240,
+      "MAE": 135.93427599979148,
+      "WAPE_%": 52.34832743720731,
+      "vies_%": -27.342631421167514,
+      "pinball_q0.75": 85.71747018875085,
+      "cobertura_%": 40.833333333333336
+    },
+    {
+      "baseline": "media_hist",
+      "nivel": "total_mes",
+      "n": 6,
+      "MAE": 2840.0531502168196,
+      "WAPE_%": 27.342631421167518,
+      "vies_%": -27.342631421167518,
+      "pinball_q0.75": 2130.0398626626143,
+      "cobertura_%": 0.0
+    },
+    {
+      "baseline": "media_hist",
+      "nivel": "sku_mes_sem_ruptura",
+      "n": 240,
+      "MAE": 135.93427599979148,
+      "WAPE_%": 52.34832743720731,
+      "vies_%": -27.342631421167514,
+      "pinball_q0.75": 85.71747018875085,
+      "cobertura_%": 40.833333333333336
+    },
+    {
+      "baseline": "mediana_hist",
+      "nivel": "sku_mes",
+      "n": 240,
+      "MAE": 143.57274999999998,
+      "WAPE_%": 55.28990589593338,
+      "vies_%": -37.79380543739128,
+      "pinball_q0.75": 96.32141666666666,
+      "cobertura_%": 37.083333333333336
+    },
+    {
+      "baseline": "mediana_hist",
+      "nivel": "total_mes",
+      "n": 6,
+      "MAE": 3925.6066666666666,
+      "WAPE_%": 37.793805437391285,
+      "vies_%": -37.793805437391285,
+      "pinball_q0.75": 2944.205,
+      "cobertura_%": 0.0
+    },
+    {
+      "baseline": "mediana_hist",
+      "nivel": "sku_mes_sem_ruptura",
+      "n": 240,
+      "MAE": 143.57274999999998,
+      "WAPE_%": 55.28990589593338,
+      "vies_%": -37.79380543739128,
+      "pinball_q0.75": 96.32141666666666,
+      "cobertura_%": 37.083333333333336
+    },
+    {
+      "baseline": "sazonal_ingenuo",
+      "nivel": "sku_mes",
+      "n": 240,
+      "MAE": 162.512375,
+      "WAPE_%": 62.58356074307023,
+      "vies_%": -7.896272598366244,
+      "pinball_q0.75": 86.38230208333334,
+      "cobertura_%": 53.333333333333336
+    },
+    {
+      "baseline": "sazonal_ingenuo",
+      "nivel": "total_mes",
+      "n": 6,
+      "MAE": 969.1116666666667,
+      "WAPE_%": 9.330129299022826,
+      "vies_%": -7.896272598366242,
+      "pinball_q0.75": 689.6004166666665,
+      "cobertura_%": 16.666666666666664
+    },
+    {
+      "baseline": "sazonal_ingenuo",
+      "nivel": "sku_mes_sem_ruptura",
+      "n": 240,
+      "MAE": 162.512375,
+      "WAPE_%": 62.58356074307023,
+      "vies_%": -7.896272598366244,
+      "pinball_q0.75": 86.38230208333334,
+      "cobertura_%": 53.333333333333336
+    },
+    {
+      "baseline": "operacional_p75",
+      "nivel": "sku_mes",
+      "n": 240,
+      "MAE": 141.22703125,
+      "WAPE_%": 54.38656895388954,
+      "vies_%": -8.005171736271134,
+      "pinball_q0.75": 75.81032552083335,
+      "cobertura_%": 52.5
+    },
+    {
+      "baseline": "operacional_p75",
+      "nivel": "total_mes",
+      "n": 6,
+      "MAE": 1509.9487499999998,
+      "WAPE_%": 14.537042073649465,
+      "vies_%": -8.005171736271134,
+      "pinball_q0.75": 962.8467708333333,
+      "cobertura_%": 50.0
+    },
+    {
+      "baseline": "operacional_p75",
+      "nivel": "sku_mes_sem_ruptura",
+      "n": 240,
+      "MAE": 141.22703125,
+      "WAPE_%": 54.38656895388954,
+      "vies_%": -8.005171736271134,
+      "pinball_q0.75": 75.81032552083335,
+      "cobertura_%": 52.5
+    }
+  ],
+  "carga": {
+    "fonte": "amostra",
+    "arquivo": "vendas_amostra.csv",
+    "linhas_lidas": 7637,
+    "data_nao_convertidos": 0,
+    "m2_nao_convertidos": 0
+  },
+  "preparo": {
+    "linhas_total_removidas": 1,
+    "linhas_incompletas_removidas": 0,
+    "meses_parciais_removidos": [],
+    "linhas_negativas": 71,
+    "sku_mes_liquido_negativo_zerados": 0,
+    "skus_sem_nenhuma_venda_removidos": 0,
+    "skus": 40,
+    "mes_inicial": "2023-10",
+    "mes_final": "2026-09",
+    "meses_cobertos": 36,
+    "linhas_sku_mes": 1380,
+    "pct_sku_mes_zerados": 8.5,
+    "pct_sku_mes_com_ruptura": 0.0
+  },
+  "avaliacao": {
+    "linhas_teste": 240,
+    "linhas_avaliadas": 240,
+    "skus_avaliados": 40,
+    "meses_teste": 6,
+    "cobertura_previsao_por_baseline_%": {
+      "media_hist": 100.0,
+      "mediana_hist": 100.0,
+      "sazonal_ingenuo": 100.0,
+      "operacional_p75": 100.0
+    }
+  },
+  "parametros": {
+    "data_corte": "2026-03",
+    "horizonte": 5,
+    "min_meses_janela": 6,
+    "janela_operacional": 6,
+    "quantil": 0.75,
+    "tratamento_negativos": "liquido_piso_zero",
+    "sazonal_rodou": true
+  }
+}
