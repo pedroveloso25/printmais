@@ -1,0 +1,179 @@
+{
+  "metricas": [
+    {
+      "abordagem": "trivial_media",
+      "nivel": "sku_mes",
+      "n": 80,
+      "pinball_rel_%": 29.7,
+      "WAPE_%": 54.9,
+      "vies_%": -8.99,
+      "cobertura_%": 50.0
+    },
+    {
+      "abordagem": "operacional_media3",
+      "nivel": "sku_mes",
+      "n": 80,
+      "pinball_rel_%": 28.66,
+      "WAPE_%": 71.54,
+      "vies_%": 28.43,
+      "cobertura_%": 62.5
+    },
+    {
+      "abordagem": "operacional_p75_6",
+      "nivel": "sku_mes",
+      "n": 80,
+      "pinball_rel_%": 29.42,
+      "WAPE_%": 79.39,
+      "vies_%": 41.09,
+      "cobertura_%": 72.5
+    },
+    {
+      "abordagem": "modelo",
+      "nivel": "sku_mes",
+      "n": 80,
+      "pinball_rel_%": 25.75,
+      "WAPE_%": 61.13,
+      "vies_%": 19.25,
+      "cobertura_%": 67.5
+    },
+    {
+      "abordagem": "trivial_media",
+      "nivel": "sku_mes_sem_ruptura",
+      "n": 80,
+      "pinball_rel_%": 29.7,
+      "WAPE_%": 54.9,
+      "vies_%": -8.99,
+      "cobertura_%": 50.0
+    },
+    {
+      "abordagem": "operacional_media3",
+      "nivel": "sku_mes_sem_ruptura",
+      "n": 80,
+      "pinball_rel_%": 28.66,
+      "WAPE_%": 71.54,
+      "vies_%": 28.43,
+      "cobertura_%": 62.5
+    },
+    {
+      "abordagem": "operacional_p75_6",
+      "nivel": "sku_mes_sem_ruptura",
+      "n": 80,
+      "pinball_rel_%": 29.42,
+      "WAPE_%": 79.39,
+      "vies_%": 41.09,
+      "cobertura_%": 72.5
+    },
+    {
+      "abordagem": "modelo",
+      "nivel": "sku_mes_sem_ruptura",
+      "n": 80,
+      "pinball_rel_%": 25.75,
+      "WAPE_%": 61.13,
+      "vies_%": 19.25,
+      "cobertura_%": 67.5
+    }
+  ],
+  "fonte": "amostra",
+  "horizonte_modelo": 1,
+  "corte_treino": "2026-07",
+  "meses_treino": [
+    "2023-11",
+    "2023-12",
+    "2024-01",
+    "2024-02",
+    "2024-03",
+    "2024-04",
+    "2024-05",
+    "2024-06",
+    "2024-07",
+    "2024-08",
+    "2024-09",
+    "2024-10",
+    "2024-11",
+    "2024-12",
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07"
+  ],
+  "meses_teste": [
+    "2026-08",
+    "2026-09"
+  ],
+  "linhas_treino": 1260,
+  "linhas_teste": 80,
+  "skus": 40,
+  "alpha_escolhido": 100,
+  "cv_pinball_rel_folds": [
+    24.0,
+    27.6,
+    26.6
+  ],
+  "cv_pinball_rel_media": 26.1,
+  "cv_pinball_rel_desvio": 1.5,
+  "previsoes_negativas_antes_do_clip": 0,
+  "teste_vazamento": "passou",
+  "pct_teste_com_ruptura": 0.0,
+  "piores_skus": [
+    {
+      "sku": "SKU004",
+      "erro_abs": 1001.2,
+      "y": 1055.9,
+      "ruptura_meses": 0,
+      "ruptura_lag": 0.0,
+      "linha": "NA",
+      "parcela_erro_pct": 9.3
+    },
+    {
+      "sku": "SKU029",
+      "erro_abs": 955.2,
+      "y": 2815.6,
+      "ruptura_meses": 0,
+      "ruptura_lag": 0.0,
+      "linha": "NA",
+      "parcela_erro_pct": 8.8
+    },
+    {
+      "sku": "SKU037",
+      "erro_abs": 953.8,
+      "y": 471.2,
+      "ruptura_meses": 0,
+      "ruptura_lag": 0.0,
+      "linha": "NA",
+      "parcela_erro_pct": 8.8
+    },
+    {
+      "sku": "SKU001",
+      "erro_abs": 767.8,
+      "y": 841.5,
+      "ruptura_meses": 0,
+      "ruptura_lag": 0.0,
+      "linha": "NA",
+      "parcela_erro_pct": 7.1
+    },
+    {
+      "sku": "SKU033",
+      "erro_abs": 710.3,
+      "y": 883.0,
+      "ruptura_meses": 0,
+      "ruptura_lag": 0.0,
+      "linha": "NA",
+      "parcela_erro_pct": 6.6
+    }
+  ]
+}
