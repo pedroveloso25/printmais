@@ -204,7 +204,7 @@ def main(fonte="real"):
                                              "pct_sku_mes_zerados", "pct_sku_mes_com_ruptura")},
         "features": NUM + CAT, "alpha_escolhido": alpha, "cv_pinball_rel_folds": [round(x, 1) for x in cv_folds],
         "cv_pinball_rel_media": round(float(np.mean(cv_folds)), 1),
-        "cv_pinball_rel_desvio": round(float(np.std(cv_folds)), 1),
+        "cv_pinball_rel_desvio": round(float(np.std(cv_folds, ddof=1)), 1),   # amostral: só 3 folds
         "previsoes_negativas_antes_do_clip": n_neg,
         "teste_vazamento": {"tipo": "perturbação na entrada (vendas e compras > T0)", "cortes": cortes_vazamento,
                             "resultado": "passou"},
