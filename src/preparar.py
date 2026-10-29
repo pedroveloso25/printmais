@@ -8,7 +8,9 @@ Decisões:
 - ruptura do SKU de demanda no mês = TODOS os códigos agregados nele com sinal de ruptura
   (se um equivalente tinha estoque, a demanda migrou para ele e a soma continua válida);
 - cada SKU entra no painel a partir do seu PRIMEIRO mês com venda > 0 até o último mês da base:
-  zeros antes do lançamento seriam falsos (o SKU não existia) e puxariam a média para baixo.
+  zeros antes do lançamento seriam falsos (o SKU não existia) e puxariam a média para baixo;
+- com `ate` (fim do treino), a seleção dos SKUs e o primeiro mês de cada um usam só meses
+  <= ate: um SKU sem venda até o corte fica fora do painel, inclusive no teste.
 """
 import pandas as pd
 
@@ -24,7 +26,8 @@ def remover_totais(df):
     return df[~eh_total], int(eh_total.sum())
 
 
-def preparar_painel(df):
+def preparar_painel(df, ate=None):
+    """ate: último mês (Period) que a seleção de SKUs pode olhar; None = base inteira."""
     info = {}
     df, info["linhas_total_removidas"] = remover_totais(df)
     obrig = [C.COL_DATA, C.COL_SKU, C.COL_QTD]
@@ -49,6 +52,9 @@ def preparar_painel(df):
 
     fim = mensal[C.COL_MES].max()
     com_venda = mensal[mensal[C.COL_QTD] > 0]
+    if ate is not None:
+        com_venda = com_venda[com_venda[C.COL_MES] <= ate]
+        info["selecao_ate"] = str(ate)
     inicio_sku = com_venda.groupby(C.COL_SKU)[C.COL_MES].min()
     info["skus_sem_nenhuma_venda_removidos"] = int(mensal[C.COL_SKU].nunique() - inicio_sku.size)
     grade = pd.DataFrame(

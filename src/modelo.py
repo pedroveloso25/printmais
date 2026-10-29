@@ -134,16 +134,28 @@ def graficos(teste, pasta):
 
 
 # ---------------------------------------------------------------- fluxo
+def corte_treino(df):
+    """Último mês do treino: os N_MESES_HOLDOUT últimos meses completos ficam para o teste."""
+    meses = np.sort(df.loc[~df["mes_parcial"], C.COL_DATA].dropna().dt.to_period("M").unique())
+    return meses[-C.N_MESES_HOLDOUT - 1]
+
+
 def main(fonte="real"):
     df, info_carga = carregar.carregar_vendas(fonte)
-    painel, info_prep = preparar.preparar_painel(df)
+    corte = corte_treino(df)
+    # população (SKUs e 1º mês de cada um) escolhida só com dados até o fim do treino
+    painel, info_prep = preparar.preparar_painel(df, ate=corte)
     produtos = carregar_produtos(info_carga["fonte"])
     verificar_sem_vazamento(painel, produtos)
     f = construir_features(painel, produtos).rename(columns={C.COL_QTD: "y"})
     f = f[f["lag_1"].notna()].reset_index(drop=True)          # precisa de ao menos 1 mês conhecido
+    # Cada linha t exige o SKU no painel em t − 1, ou seja, 1ª venda <= t − 1 (conhecida no
+    # corte da previsão). Por isso a população de cada fold do CV já é causal sem recorte extra.
+    inicio = painel.groupby(C.COL_SKU)[C.COL_MES].min()
+    assert (f[C.COL_MES] > f[C.COL_SKU].map(inicio)).all()
 
     meses = np.sort(f[C.COL_MES].unique())
-    corte = meses[-C.N_MESES_HOLDOUT - 1]
+    assert meses[-C.N_MESES_HOLDOUT - 1] == corte
     treino, teste = f[f[C.COL_MES] <= corte].copy(), f[f[C.COL_MES] > corte].copy()
     assert treino[C.COL_MES].max() < teste[C.COL_MES].min()
 
@@ -191,6 +203,9 @@ def main(fonte="real"):
         "meses_treino": [str(m) for m in np.sort(treino[C.COL_MES].unique())],
         "meses_teste": [str(m) for m in np.sort(teste[C.COL_MES].unique())],
         "linhas_treino": len(treino), "linhas_teste": len(teste), "skus": int(f[C.COL_SKU].nunique()),
+        "skus_treino": int(treino[C.COL_SKU].nunique()), "skus_teste": int(teste[C.COL_SKU].nunique()),
+        "painel": {k: info_prep[k] for k in ("selecao_ate", "skus", "linhas_sku_mes",
+                                             "pct_sku_mes_zerados", "pct_sku_mes_com_ruptura")},
         "features": NUM + CAT, "alpha_escolhido": alpha, "cv_pinball_rel_folds": [round(x, 1) for x in cv_folds],
         "cv_pinball_rel_media": round(float(np.mean(cv_folds)), 1),
         "cv_pinball_rel_desvio": round(float(np.std(cv_folds)), 1),
