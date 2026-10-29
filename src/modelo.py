@@ -9,7 +9,8 @@ com o lead time de 4–5 meses é declarado como limite no relatório.
 
 Tudo que aprende com dados (imputação, escala, one-hot, Ridge) fica dentro do Pipeline
 e é ajustado só no treino de cada fold. As features são defasadas por SKU antes de
-qualquer janela (groupby + shift(h)) e passam por um teste de vazamento por perturbação.
+qualquer janela (groupby + shift(h)). O teste de vazamento (src/vazamento.py) perturba as
+vendas e compras brutas depois de T0 e roda carga -> preparar -> features inteiro.
 
 A marcação de ruptura NÃO entra em nenhuma feature nem filtro de treino: ela vem do estoque
 reconstruído a partir da posição do Sankhya em 20/10/2026, descontando as movimentações
@@ -32,7 +33,7 @@ from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-from src import avaliar, carregar, config as C, preparar
+from src import avaliar, carregar, config as C, preparar, vazamento
 
 H = C.HORIZONTE_MODELO
 Q = C.QUANTIL_OPERACIONAL
@@ -72,20 +73,24 @@ def construir_features(painel, produtos, h=H):
     return p.sort_values([C.COL_SKU, C.COL_MES]).reset_index(drop=True)
 
 
-def verificar_sem_vazamento(painel, produtos, h=H, n_cortes=3, semente=C.SEMENTE):
-    """Embaralha a demanda depois de T0; features de t ≤ T0 + h têm que ficar iguais."""
-    meses = np.sort(painel[C.COL_MES].unique())
-    rng = np.random.default_rng(semente)
-    idx = [C.COL_SKU, C.COL_MES]
-    base = construir_features(painel, produtos, h).set_index(idx)[FEATS_TEMPO]
-    for t0 in rng.choice(meses[:-h], size=min(n_cortes, len(meses) - h), replace=False):
-        alt = painel.copy()
-        fut = alt[C.COL_MES] > t0
-        alt.loc[fut, C.COL_QTD] = rng.uniform(0, 1e6, fut.sum())
-        novo = construir_features(alt, produtos, h).set_index(idx)[FEATS_TEMPO]
-        vis = base.index.get_level_values(C.COL_MES) <= t0 + h
-        ok = np.isclose(base[vis].to_numpy(float), novo.loc[base.index[vis]].to_numpy(float), equal_nan=True)
-        assert ok.all(), f"VAZAMENTO em {np.array(FEATS_TEMPO)[~ok.all(axis=0)]} (corte {t0})"
+def corte_treino(df):
+    """Último mês do treino: os N_MESES_HOLDOUT últimos meses completos ficam para o teste."""
+    meses = np.sort(df.loc[~df["mes_parcial"], C.COL_DATA].dropna().dt.to_period("M").unique())
+    return meses[-C.N_MESES_HOLDOUT - 1]
+
+
+def tabela_features(fonte, bruto=None, ate=None):
+    """carga -> preparar -> features. Retorna (f, painel, info_carga, info_prep, corte).
+
+    ate: fim do treino usado na seleção da população; None = calculado dos meses completos.
+    """
+    df, info_carga = carregar.carregar_vendas(fonte, bruto)
+    corte = corte_treino(df) if ate is None else ate
+    # população (SKUs e 1º mês de cada um) escolhida só com dados até o fim do treino
+    painel, info_prep = preparar.preparar_painel(df, ate=corte)
+    f = construir_features(painel, carregar_produtos(info_carga["fonte"])).rename(columns={C.COL_QTD: "y"})
+    f = f[f["lag_1"].notna()].reset_index(drop=True)          # precisa de ao menos 1 mês conhecido
+    return f, painel, info_carga, info_prep, corte
 
 
 # ---------------------------------------------------------------- modelo
@@ -134,21 +139,12 @@ def graficos(teste, pasta):
 
 
 # ---------------------------------------------------------------- fluxo
-def corte_treino(df):
-    """Último mês do treino: os N_MESES_HOLDOUT últimos meses completos ficam para o teste."""
-    meses = np.sort(df.loc[~df["mes_parcial"], C.COL_DATA].dropna().dt.to_period("M").unique())
-    return meses[-C.N_MESES_HOLDOUT - 1]
-
-
 def main(fonte="real"):
-    df, info_carga = carregar.carregar_vendas(fonte)
-    corte = corte_treino(df)
-    # população (SKUs e 1º mês de cada um) escolhida só com dados até o fim do treino
-    painel, info_prep = preparar.preparar_painel(df, ate=corte)
-    produtos = carregar_produtos(info_carga["fonte"])
-    verificar_sem_vazamento(painel, produtos)
-    f = construir_features(painel, produtos).rename(columns={C.COL_QTD: "y"})
-    f = f[f["lag_1"].notna()].reset_index(drop=True)          # precisa de ao menos 1 mês conhecido
+    f, painel, info_carga, info_prep, corte = tabela_features(fonte)
+    fonte, cfg, _ = carregar.escolher_fonte(info_carga["fonte"])
+    cortes_vazamento = vazamento.testar_entrada(
+        carregar.ler_bruto(fonte), cfg, lambda b: tabela_features(fonte, b, ate=corte)[0],
+        list(dict.fromkeys(FEATS_TEMPO + NUM + CAT)), H)
     # Cada linha t exige o SKU no painel em t − 1, ou seja, 1ª venda <= t − 1 (conhecida no
     # corte da previsão). Por isso a população de cada fold do CV já é causal sem recorte extra.
     inicio = painel.groupby(C.COL_SKU)[C.COL_MES].min()
@@ -209,7 +205,9 @@ def main(fonte="real"):
         "features": NUM + CAT, "alpha_escolhido": alpha, "cv_pinball_rel_folds": [round(x, 1) for x in cv_folds],
         "cv_pinball_rel_media": round(float(np.mean(cv_folds)), 1),
         "cv_pinball_rel_desvio": round(float(np.std(cv_folds)), 1),
-        "previsoes_negativas_antes_do_clip": n_neg, "teste_vazamento": "passou",
+        "previsoes_negativas_antes_do_clip": n_neg,
+        "teste_vazamento": {"tipo": "perturbação na entrada (vendas e compras > T0)", "cortes": cortes_vazamento,
+                            "resultado": "passou"},
         "pct_teste_com_ruptura": round(100 * teste["ruptura"].mean(), 1),
     }
     (saida / "metricas_modelo.json").write_text(json.dumps(

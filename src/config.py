@@ -41,6 +41,13 @@ FONTE_REAL = {
     "filtro_verdadeiro": ["incluir"],       # só SKUs marcados para o modelo
     "col_mes_parcial": "mes_parcial",       # meses incompletos (primeiro e último)
     "col_ruptura": "possivel_ruptura",      # mês com sinal de falta de estoque
+    # Estoque mensal reconstruído no tratamento: posição do Sankhya (20/10/2026) menos as
+    # movimentações posteriores. Usado só pelo teste de vazamento (src/vazamento.py) para
+    # refazer o estoque e a ruptura quando as vendas/compras futuras são perturbadas.
+    "estoque_reconstruido": {
+        "chave": "codigo", "compras": "compras_m2",
+        "inicio": "estoque_inicio_m2", "fim": "estoque_fim_m2",
+    },
 }
 
 # ---------------------------------------------------------------- amostra sintética

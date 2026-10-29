@@ -60,15 +60,24 @@ def _numero(s, decimal):
     return pd.to_numeric(t, errors="coerce")
 
 
-def carregar_vendas(fonte="auto"):
-    """Retorna (df, info). df tem as colunas internas data/sku/m2 + as originais restantes."""
+def ler_bruto(fonte="auto"):
+    """Tabela bruta como está no arquivo (texto), antes de qualquer conversão."""
     fonte, cfg, pasta = escolher_fonte(fonte)
     _validar_config(fonte, cfg)
     caminho = pasta / cfg["arquivo"]
     if not caminho.exists():
         raise ErroSchema(f"Arquivo configurado não encontrado: {caminho.name} em {pasta.name}/")
+    return _ler(caminho, cfg)
 
-    bruto = _ler(caminho, cfg)
+
+def carregar_vendas(fonte="auto", bruto=None):
+    """Retorna (df, info). df tem as colunas internas data/sku/m2 + as originais restantes.
+
+    bruto: tabela já lida (como sai de ler_bruto), para o teste de vazamento na entrada.
+    """
+    fonte, cfg, pasta = escolher_fonte(fonte)
+    caminho = pasta / cfg["arquivo"]
+    bruto = ler_bruto(fonte) if bruto is None else bruto.copy()
     bruto.columns = [str(c).strip() for c in bruto.columns]
     opcionais = list(cfg.get("filtro_verdadeiro") or []) + [
         c for c in (cfg.get("col_mes_parcial"), cfg.get("col_ruptura")) if c]
