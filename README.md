@@ -171,5 +171,5 @@ foi descrita pela equipe a partir do processo real da empresa.
 - Antes de cada commit, conferimos com `git status` que nenhum arquivo de dados era versionado.
 - A equipe revisou a lógica dos baselines e das métricas (pinball loss, taxa de cobertura) e a
   justificativa da janela móvel.
-- A verificação individual de vazamento (`docs/vazamento/`) foi escrita por cada integrante
-  sem uso de IA.
+- A verificação individual de vazamento (`docs/vazamento/<nome>.md`) foi escrita por cada
+  integrante sem uso de IA. Só o modelo em branco (`docs/vazamento/MODELO.md`) foi gerado com IA.
