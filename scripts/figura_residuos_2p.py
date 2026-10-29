@@ -17,16 +17,11 @@ import pandas as pd
 from sklearn.metrics import make_scorer, mean_pinball_loss
 from sklearn.model_selection import GridSearchCV
 
-from src import avaliar, carregar, config as C, modelo as M, preparar
+from src import avaliar, config as C, modelo as M
 
 
 def main(fonte="auto"):
-    df, info_carga = carregar.carregar_vendas(fonte)
-    painel, _ = preparar.preparar_painel(df)
-    f = M.construir_features(painel, M.carregar_produtos(info_carga["fonte"])).rename(columns={C.COL_QTD: "y"})
-    f = f[f["lag_1"].notna()].reset_index(drop=True)
-    meses = np.sort(f[C.COL_MES].unique())
-    corte = meses[-C.N_MESES_HOLDOUT - 1]
+    f, _, info_carga, _, corte = M.tabela_features(fonte)
     treino, teste = f[f[C.COL_MES] <= corte].copy(), f[f[C.COL_MES] > corte].copy()
     busca = GridSearchCV(
         M.montar_pipeline(), {"ridge__alpha": C.ALPHAS_RIDGE},

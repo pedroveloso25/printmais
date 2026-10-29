@@ -118,6 +118,26 @@
   "linhas_treino": 1260,
   "linhas_teste": 80,
   "skus": 40,
+  "skus_treino": 40,
+  "skus_teste": 40,
+  "painel": {
+    "selecao_ate": "2026-07",
+    "skus": 40,
+    "linhas_sku_mes": 1380,
+    "pct_sku_mes_zerados": 8.5,
+    "pct_sku_mes_com_ruptura": 0.0
+  },
+  "features": [
+    "lag_1",
+    "media_3",
+    "max_3",
+    "media_hist",
+    "n_meses_hist",
+    "largura_m",
+    "linha",
+    "acabamento",
+    "marca"
+  ],
   "alpha_escolhido": 100,
   "cv_pinball_rel_folds": [
     24.0,
@@ -127,7 +147,15 @@
   "cv_pinball_rel_media": 26.1,
   "cv_pinball_rel_desvio": 1.5,
   "previsoes_negativas_antes_do_clip": 0,
-  "teste_vazamento": "passou",
+  "teste_vazamento": {
+    "tipo": "perturbação na entrada (vendas e compras > T0)",
+    "cortes": [
+      "2024-01",
+      "2025-09",
+      "2025-12"
+    ],
+    "resultado": "passou"
+  },
   "pct_teste_com_ruptura": 0.0,
   "piores_skus": [
     {
@@ -135,7 +163,6 @@
       "erro_abs": 1001.2,
       "y": 1055.9,
       "ruptura_meses": 0,
-      "ruptura_lag": 0.0,
       "linha": "NA",
       "parcela_erro_pct": 9.3
     },
@@ -144,7 +171,6 @@
       "erro_abs": 955.2,
       "y": 2815.6,
       "ruptura_meses": 0,
-      "ruptura_lag": 0.0,
       "linha": "NA",
       "parcela_erro_pct": 8.8
     },
@@ -153,7 +179,6 @@
       "erro_abs": 953.8,
       "y": 471.2,
       "ruptura_meses": 0,
-      "ruptura_lag": 0.0,
       "linha": "NA",
       "parcela_erro_pct": 8.8
     },
@@ -162,7 +187,6 @@
       "erro_abs": 767.8,
       "y": 841.5,
       "ruptura_meses": 0,
-      "ruptura_lag": 0.0,
       "linha": "NA",
       "parcela_erro_pct": 7.1
     },
@@ -171,7 +195,6 @@
       "erro_abs": 710.3,
       "y": 883.0,
       "ruptura_meses": 0,
-      "ruptura_lag": 0.0,
       "linha": "NA",
       "parcela_erro_pct": 6.6
     }

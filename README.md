@@ -116,9 +116,11 @@ python -m src.main --fonte real --horizonte 1 --min-meses-janela 1   # diagnóst
 | `src/avaliar.py` | métricas agregadas |
 | `src/main.py` | fluxo ponta a ponta dos baselines (Entrega 4) |
 | `src/modelo.py` | modelo da Entrega 5: Ridge em Pipeline × baselines no mesmo holdout temporal |
+| `src/vazamento.py` | teste de vazamento na entrada: perturba vendas e compras brutas depois de T0 e roda o pipeline inteiro |
 | `src/perfil_dados.py` | perfil agregado dos arquivos brutos |
 | `src/gerar_amostra.py` | gerador da amostra sintética |
 | `scripts/figura_residuos_2p.py` | figura de resíduos em 2 painéis do relatório da Entrega 5 |
+| `scripts/provar_teste_vazamento.py` | mostra que o teste de vazamento falha no commit 2ddbe2e (ruptura como feature) e passa na versão atual |
 
 ## Documentos
 | Arquivo | Entrega |
