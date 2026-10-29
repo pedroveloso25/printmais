@@ -10,6 +10,11 @@ com o lead time de 4–5 meses é declarado como limite no relatório.
 Tudo que aprende com dados (imputação, escala, one-hot, Ridge) fica dentro do Pipeline
 e é ajustado só no treino de cada fold. As features são defasadas por SKU antes de
 qualquer janela (groupby + shift(h)) e passam por um teste de vazamento por perturbação.
+
+A marcação de ruptura NÃO entra em nenhuma feature nem filtro de treino: ela vem do estoque
+reconstruído a partir da posição do Sankhya em 20/10/2026, descontando as movimentações
+posteriores, então não existe versão dela conhecida no corte t. Ela é usada só como rótulo de
+diagnóstico ex post (subconjunto sem ruptura e análise dos piores códigos).
 """
 import argparse
 import json
@@ -31,9 +36,9 @@ from src import avaliar, carregar, config as C, preparar
 
 H = C.HORIZONTE_MODELO
 Q = C.QUANTIL_OPERACIONAL
-NUM = ["lag_1", "media_3", "max_3", "media_hist", "n_meses_hist", "ruptura_lag", "largura_m"]
+NUM = ["lag_1", "media_3", "max_3", "media_hist", "n_meses_hist", "largura_m"]
 CAT = ["linha", "acabamento", "marca"]
-FEATS_TEMPO = ["lag_1", "lag_2", "media_3", "max_3", "media_hist", "n_meses_hist", "ruptura_lag", "p75_6"]
+FEATS_TEMPO = ["lag_1", "lag_2", "media_3", "max_3", "media_hist", "n_meses_hist", "p75_6"]
 
 
 # ---------------------------------------------------------------- dados
@@ -60,7 +65,6 @@ def construir_features(painel, produtos, h=H):
     p["media_hist"] = gd.transform(lambda s: s.expanding().mean())
     p["n_meses_hist"] = gd.transform(lambda s: s.expanding().count())
     p["p75_6"] = gd.transform(lambda s: s.rolling(C.JANELA_OPERACIONAL, min_periods=1).quantile(Q))
-    p["ruptura_lag"] = g["ruptura"].shift(h).astype(float)
     if produtos is not None:
         p = p.merge(produtos, on=C.COL_SKU, how="left")
     else:
@@ -78,7 +82,6 @@ def verificar_sem_vazamento(painel, produtos, h=H, n_cortes=3, semente=C.SEMENTE
         alt = painel.copy()
         fut = alt[C.COL_MES] > t0
         alt.loc[fut, C.COL_QTD] = rng.uniform(0, 1e6, fut.sum())
-        alt.loc[fut, "ruptura"] = ~alt.loc[fut, "ruptura"]
         novo = construir_features(alt, produtos, h).set_index(idx)[FEATS_TEMPO]
         vis = base.index.get_level_values(C.COL_MES) <= t0 + h
         ok = np.isclose(base[vis].to_numpy(float), novo.loc[base.index[vis]].to_numpy(float), equal_nan=True)
@@ -180,7 +183,7 @@ def main(fonte="real"):
     teste["erro_abs"] = (teste["y"] - teste["modelo"]).abs()
     piores = (teste.groupby(C.COL_SKU)
               .agg(erro_abs=("erro_abs", "sum"), y=("y", "sum"), ruptura_meses=("ruptura", "sum"),
-                   ruptura_lag=("ruptura_lag", "sum"), linha=("linha", "first"))
+                   linha=("linha", "first"))
               .assign(parcela_erro_pct=lambda x: 100 * x["erro_abs"] / x["erro_abs"].sum())
               .sort_values("erro_abs", ascending=False).head(5))
     resumo = {
@@ -188,7 +191,7 @@ def main(fonte="real"):
         "meses_treino": [str(m) for m in np.sort(treino[C.COL_MES].unique())],
         "meses_teste": [str(m) for m in np.sort(teste[C.COL_MES].unique())],
         "linhas_treino": len(treino), "linhas_teste": len(teste), "skus": int(f[C.COL_SKU].nunique()),
-        "alpha_escolhido": alpha, "cv_pinball_rel_folds": [round(x, 1) for x in cv_folds],
+        "features": NUM + CAT, "alpha_escolhido": alpha, "cv_pinball_rel_folds": [round(x, 1) for x in cv_folds],
         "cv_pinball_rel_media": round(float(np.mean(cv_folds)), 1),
         "cv_pinball_rel_desvio": round(float(np.std(cv_folds)), 1),
         "previsoes_negativas_antes_do_clip": n_neg, "teste_vazamento": "passou",
