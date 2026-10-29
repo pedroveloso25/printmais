@@ -60,15 +60,50 @@ A previsão sai em m². A decisão de compra fica fora deste repositório e segu
   até números agregados em m² revelam o volume de vendas.
 
 ## Como rodar
+
+### 1. Instalação
 ```bash
-pip install -r requirements.txt
-python -m src.gerar_amostra          # só na primeira vez, para a amostra sintética
+git clone https://github.com/pedroveloso25/printmais
+cd printmais
+python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt                     # versões fixadas; testado com Python 3.13
+```
+No Windows, se o `pip` falhar com erro de caminho longo, crie o ambiente num caminho curto
+(ex.: `C:\venvs\printmais`).
+
+### 2. Dados
+Coloque `vendas_estoque_mensal.csv` e `produtos.csv` em `dados/bruto/`. A base é privada: o
+professor solicita à equipe, que encaminha à empresa (ver `dados/bruto/COMO_OBTER.md`).
+
+### 3. Modelo da Entrega 5 (números do relatório)
+```bash
+python -m src.modelo --fonte real
+```
+- Métricas (seção 7 do relatório): `relatorios/real/metricas_modelo.json`
+- Gráficos de resíduos: `relatorios/real/figs/residuos.png` (4 painéis)
+- Figura da seção 8 (2 painéis), depois do comando acima:
+  `python -m scripts.figura_residuos_2p --fonte real` → `relatorios/real/figs/residuos_2p.png`.
+  O script confere α e métricas contra `metricas_modelo.json` antes de plotar.
+- `relatorios/real/` é ignorado pelo git: os arquivos só existem depois de rodar com a base.
+- O resultado é determinístico (`SEMENTE = 42` em `src/config.py`): duas execuções geram o
+  mesmo `metricas_modelo.json`, byte a byte.
+
+### 4. Sem a base real (amostra sintética)
+```bash
+python -m src.modelo --fonte amostra
+```
+Roda o mesmo pipeline sobre `dados/amostra/vendas_amostra.csv` (100% sintética, versionada) e
+grava em `relatorios/amostra/` (a figura de 2 painéis sai com
+`python -m scripts.figura_residuos_2p --fonte amostra`). Serve para conferir que o código roda de ponta a ponta; os
+números **não** são os do relatório. Com `--fonte auto` (padrão), o código usa `dados/bruto/`
+se houver arquivos e cai para a amostra se a pasta estiver vazia.
+
+### Baselines da Entrega 4
+```bash
 python -m src.main                   # usa dados/bruto/ se houver arquivos; senão, a amostra
 python -m src.main --fonte amostra   # força a amostra
 python -m src.main --fonte real --horizonte 1 --min-meses-janela 1   # diagnóstico, não é a regra
 ```
-Para os dados reais, preencha `FONTE_REAL` em `src/config.py` (arquivo, encoding, separador e
-colunas) com base no perfil.
 
 ## Estrutura
 | Arquivo | Papel |
@@ -79,9 +114,26 @@ colunas) com base no perfil.
 | `src/particao.py` | cria features defasadas de *H* meses, faz o split temporal e o teste de vazamento |
 | `src/baselines.py` | baselines de média, mediana, sazonal ingênuo e operacional (P75 em 6 meses) |
 | `src/avaliar.py` | métricas agregadas |
-| `src/main.py` | fluxo ponta a ponta |
+| `src/main.py` | fluxo ponta a ponta dos baselines (Entrega 4) |
+| `src/modelo.py` | modelo da Entrega 5: Ridge em Pipeline × baselines no mesmo holdout temporal |
 | `src/perfil_dados.py` | perfil agregado dos arquivos brutos |
 | `src/gerar_amostra.py` | gerador da amostra sintética |
+| `scripts/figura_residuos_2p.py` | figura de resíduos em 2 painéis do relatório da Entrega 5 |
+
+## Documentos
+| Arquivo | Entrega |
+|---|---|
+| `relatorios/relatorio_final_entrega4.md` | E04: relatório final (dados + baselines) |
+| `notebooks/01_qualidade_dados.ipynb` | E04: relatório de qualidade dos dados |
+| `docs/vazamento/` | E04: verificações individuais de vazamento |
+| **PENDENTE** `docs/E03_canvas_ml_2026-10-08.pdf` | E03: Canvas de ML |
+| **PENDENTE** `docs/E04_contrato_dados_*.pdf` | E04: contrato de dados e auditoria |
+| **PENDENTE** `docs/E05_ficha_modelo1_2026-10-15.pdf` | ficha do modelo 1 |
+| **PENDENTE** `docs/E05_ficha_modelo2_2026-10-22.pdf` | ficha do modelo 2 |
+
+## Notebooks
+`notebooks/` é exploratório. O pipeline oficial, que gera todos os números do relatório, é
+`src/` (`python -m src.modelo`). Nenhum número do relatório sai de notebook.
 
 ## Declaração de uso de IA
 
