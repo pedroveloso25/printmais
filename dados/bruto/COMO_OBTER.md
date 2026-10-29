@@ -4,11 +4,10 @@ Os dados brutos não são versionados: são dados comerciais sigilosos da Print 
 cedidos à equipe exclusivamente para este projeto acadêmico.
 
 - **Fornecido por:** gestor da Print Mais, a pedido da equipe
-- **Data de recebimento:** 19/10/2026
-- **Origem:** arquivos CSV e XLSX gerados manualmente nos computadores da empresa
-  (a empresa não utiliza ERP; não há extração automatizada)
-- **Período coberto:** fev/2026 a ago/2026 (7 meses; vendas por SKU, em m²). A equipe está
-  solicitando histórico anterior.
+- **Data de recebimento:** 20 e 21/10/2026 (relatório de estoque com posição em 20/10/2026)
+- **Origem:** relatórios exportados do ERP Sankhya ("Detalhes do Produto" e listas dos
+  containers), tratados em CSV/XLSX antes de entrar no repositório
+- **Período coberto:** fev/2026 a out/2026 (fev e out parciais; 7 meses completos, mar–set; vendas por SKU, em m²). O Sankhya não tem venda por item antes de fev/2026.
 
 ## Arquivos esperados em `dados/bruto/`
 

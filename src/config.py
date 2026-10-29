@@ -80,3 +80,13 @@ N_MESES_TESTE = 6             # usado se DATA_CORTE for None
 # Base real: meses completos 2026-03..2026-09 (7). Corte no 1º mês completo deixa os 6
 # seguintes como teste; com HORIZONTE = 5 só os últimos têm informação em t − 5.
 DATA_CORTE = None             # último mês do treino ("AAAA-MM"); None = fim − N_MESES_TESTE
+
+# ---------------------------------------------------------------- modelo (Entrega 5)
+# Com 7 meses completos, HORIZONTE = 5 não deixa linhas avaliáveis. O primeiro modelo usa
+# horizonte de 1 mês e declara o descasamento com o lead time nos Limites do relatório.
+HORIZONTE_MODELO = 1
+N_MESES_HOLDOUT = 2            # últimos 2 meses completos = teste final (usado uma vez)
+N_SPLITS_CV = 3                # TimeSeriesSplit sobre os meses do treino
+ALPHAS_RIDGE = [0.1, 1, 10, 100, 1000]
+SEMENTE = 42
+ARQUIVO_PRODUTOS = "produtos.csv"   # atributos fixos: largura, linha, acabamento, marca
