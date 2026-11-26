@@ -97,3 +97,21 @@ N_SPLITS_CV = 3                # TimeSeriesSplit sobre os meses do treino
 ALPHAS_RIDGE = [0.1, 1, 10, 100, 1000]
 SEMENTE = 42
 ARQUIVO_PRODUTOS = "produtos.csv"   # atributos fixos: largura, linha, acabamento, marca
+
+# ---------------------------------------------------------------- Entrega 6
+# Baseline B0 = regra P75 de 6 meses (coluna p75_6 do modelo). τ principal = QUANTIL_OPERACIONAL.
+TAUS_SENSIBILIDADE = [0.6, 0.9]
+# Grades da busca por CV temporal (seção 5 do relatório). y em m² e features padronizadas:
+# a penalidade L1 do QuantileRegressor soma alpha × |coef em m²| à perda média em m².
+GRADE_LINEAR = {"alpha": [0, 0.01, 0.1, 1, 10, 100, 1000]}
+GRADE_ARVORE = {"max_depth": [2, 3, 4, 6], "min_samples_leaf": [3, 5, 10, 20]}
+GRADE_GB = {"n_estimators": [50, 100, 200], "max_depth": [2, 3], "learning_rate": [0.05, 0.1],
+            "min_samples_leaf": [5, 10]}
+N_BOOT = 2000                 # bootstrap por código (os 2 meses do mesmo código andam juntos)
+LAGS_DEFASAMENTO = [1, 4, 5]  # T2: lag 1 (o que o modelo prevê) × 4–5 (lead time real)
+# Camada de decisão (T3/T4). Cobertura de 1 mês: entram 1–2 containers/mês (CONTEXTO §1).
+M2_CONTAINER = 93_400         # capacidade de mídia por container
+BOBINAS_CONTAINER = 1_600
+PISO_BOBINAS = 30             # lote mínimo por código que entra no pedido
+MARGEM_FALTA = 0.40           # custo de faltar, fração do preço (margem perdida)
+CUSTO_SOBRA_IRRESTRITO = 0.026  # custo de sobrar sem restrição de espaço (capital + desconto)
