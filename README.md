@@ -88,6 +88,18 @@ python -m src.modelo --fonte real
 - O resultado é determinístico (`SEMENTE = 42` em `src/config.py`): duas execuções geram o
   mesmo `metricas_modelo.json`, byte a byte.
 
+### 3b. Entrega 6 (relatório preliminar) — comando único
+```bash
+python -m src.e06 --fonte real      # ~4 min; --fonte amostra roda sem a base
+```
+- T1 decomposição do ganho (B0 = P75 de 6 meses, B1 = s × B0, três modelos de quantil), com
+  sensibilidade em τ = 0,6 e 0,9; T2 defasamento (lag 1 × 4 × 5); T3 quadro de comparação e
+  ganho em m²/bobinas com piso de 30; T4 erros por grupo. Inclui o teste de vazamento da E05.
+- Grades de hiperparâmetros e constantes operacionais: seção "Entrega 6" de `src/config.py`.
+- Saída: `relatorios/real/e06.json` (não versionado). Leitura: `notebooks/02_entrega6.ipynb`
+  (só lê o JSON; versionado sem saídas).
+- Determinístico com `SEMENTE = 42`, exceto os campos `tempo_*` (custo de treino/inferência).
+
 ### 4. Sem a base real (amostra sintética)
 ```bash
 python -m src.modelo --fonte amostra
