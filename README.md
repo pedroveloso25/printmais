@@ -14,23 +14,23 @@ pedir** em cada importação.
 ## Formulação
 | Item | Definição |
 |---|---|
-| Unidade de análise | SKU × mês |
-| Alvo | m² vendidos no mês |
-| Horizonte | 5 meses: a previsão do mês *t* usa só informação até *t − 5* |
-| Partição | temporal. O treino vai até a data de corte (`DATA_CORTE` em `src/config.py`) e o teste são os meses seguintes |
-| Métricas | MAE, WAPE, viés, pinball loss (q = 0,75) e taxa de cobertura, calculadas por SKU × mês e no total do mês. Não usamos MAPE porque ele quebra em meses com demanda zero |
+| Unidade de análise | código de demanda (SKUs equivalentes somados) × mês |
+| Alvo | m² vendidos no mês; o modelo estima o quantil τ = 0,75 |
+| Horizonte | 1 mês na modelagem (E05/E06): com 7 meses de histórico, o horizonte real de 4–5 meses não deixa linhas avaliáveis. O descasamento é medido na E06 (T2) |
+| Partição | temporal: treino abr–jul/2026, teste ago–set/2026; CV com `TimeSeriesSplit` por mês |
+| Métricas | principal: pinball loss em τ = 0,75 (sensibilidade em 0,6 e 0,9); secundária: MAE/WAPE; também viés e cobertura. Não usamos MAPE porque ele quebra em meses com demanda zero |
 
 ## Regra operacional atual (baseline a bater)
-A empresa estima a demanda mensal de cada SKU pelo **percentil 75 da demanda mensal dos últimos
-6 meses** disponíveis na data do pedido. No backtest, a regra é recalculada em janela móvel para
-cada mês do teste, sempre terminando em *t − 5*.
+Desde a E06, o baseline é a **média de venda dos 3 últimos meses fechados** (coluna "Giro Média
+30 à 90" do Sankhya), regra confirmada na devolutiva com o gestor (`docs/E06_devolutiva_francisco.md`).
 
-Os outros baselines são a média e a mediana históricas do SKU e o sazonal ingênuo (mesmo mês do
-ano anterior). O sazonal ingênuo só roda se a base tiver pelo menos 24 meses.
+A E04 e a E05 usaram o **percentil 75 dos últimos 6 meses** como regra da empresa. Ele continua no
+quadro da E06 como segunda régua, para manter a comparação com as entregas anteriores. Os
+baselines da E04 (média e mediana históricas, sazonal ingênuo) seguem em `src/main.py`.
 
 ## Uso a jusante
 A previsão sai em m². A decisão de compra fica fora deste repositório e segue três passos:
-1. Soma a demanda prevista dos **2 meses seguintes à chegada** (cobertura).
+1. Toma a demanda prevista de **1 mês** (cobertura: entram 1 a 2 containers por mês).
 2. Desconta o estoque projetado e converte o resultado para **bobinas** (m² por bobina de cada SKU).
 3. Aplica o **lote mínimo por código** e a **capacidade do container**, que é fixa em m².
 
