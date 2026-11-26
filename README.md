@@ -140,6 +140,7 @@ python -m src.main --fonte real --horizonte 1 --min-meses-janela 1   # diagnóst
 | `relatorios/relatorio_final_entrega4.md` | E04: relatório final (dados + baselines) |
 | `notebooks/01_qualidade_dados.ipynb` | E04: relatório de qualidade dos dados |
 | `docs/vazamento/` | E04: verificações individuais de vazamento |
+| `docs/E06_devolutiva_francisco.md` | E06: devolutiva com o gestor (23 e 25/11) sobre custo do erro, τ e capacidade (seção 11) |
 | **PENDENTE** `docs/E03_canvas_ml_2026-10-08.pdf` | E03: Canvas de ML |
 | **PENDENTE** `docs/E04_contrato_dados_*.pdf` | E04: contrato de dados e auditoria |
 | **PENDENTE** `docs/E05_ficha_modelo1_2026-10-15.pdf` | ficha do modelo 1 |
