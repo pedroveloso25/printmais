@@ -21,7 +21,7 @@ from sklearn.metrics import mean_pinball_loss
 
 from src import carregar, config as C, modelo as M
 
-FOCO = ["B0_p75_6", "ref_media3", "M_gb_quantil"]   # regra da empresa, melhor régua, melhor modelo
+FOCO = ["B0_media3", "B0_p75_6", "M_gb_quantil"]   # regra atual, baseline da E04/E05, melhor modelo
 
 
 # ---------------------------------------------------------------- bobinas
@@ -159,7 +159,7 @@ def fora_do_filtro(treino, teste, modelo_gb, tau):
     if te.empty:
         return {"codigos": 0}
     te["M_gb_quantil"] = np.clip(modelo_gb.predict(te[M.NUM + M.CAT]), 0, None)
-    te["B0_p75_6"], te["ref_media3"] = te["p75_6"], te["media_3"]
+    te["B0_p75_6"], te["B0_media3"] = te["p75_6"], te["media_3"]
     r = _resumo_grupo(te, FOCO, tau)
     r["demanda_relativa_aos_oficiais_%"] = 100 * te["y"].sum() / teste["y"].sum()
     return r

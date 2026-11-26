@@ -6,14 +6,16 @@ Mesma tabela de features, população (30 códigos `incluir`), horizonte (H = 1)
 (ago–set) do modelo da E05 (src/modelo.py). Nada aqui muda o pipeline da E05.
 
 T1 — três níveis, mesma partição, mesma métrica (pinball em τ):
-  B0  regra da empresa: P75 dos últimos 6 meses (coluna p75_6);
+  B0  regra da empresa, em duas versões (C.BASES_B0): média dos 3 últimos meses (principal,
+      "Giro Média 30 à 90" do Sankhya, confirmada na devolutiva de 23–25/11) e P75 dos 6 últimos
+      meses (baseline da E04/E05, mantido para comparação);
   B1  s × B0, com s calibrado SÓ no treino para que ~τ dos reais fiquem abaixo de s × B0;
   M   três modelos de quantil: linear (QuantileRegressor, L1), árvore (DecisionTree + fator s
       calibrado nas previsões fora da amostra do CV de treino) e GradientBoosting(loss=quantile).
   efeito quantil = B1 − B0; efeito modelagem = M − B1. Negativo = melhora.
   Incerteza: bootstrap por código (os 2 meses de teste do mesmo código não são independentes).
   Sensibilidade: τ = 0,6 e 0,9 refazem s e retreinam os modelos naquele τ; B0 fica igual
-  (a regra da empresa é sempre P75).
+  (a regra da empresa não muda com τ).
 
 T2 — autocorrelação da demanda mensal por código, lag 1 × lag 4 × lag 5, com cada série
 dividida pela média do próprio código antes de juntar os pares. Usa os 7 meses completos
@@ -22,6 +24,7 @@ dividida pela média do próprio código antes de juntar os pares. Usa os 7 mese
 T3 e T4: src/e06_decisao.py. Saída: relatorios/<fonte>/e06.json. Imprime só métricas relativas e contagens.
 """
 import argparse
+import hashlib
 import json
 import sys
 import time
@@ -173,16 +176,11 @@ def bootstrap_diferencas(teste, pares, tau, n_boot=C.N_BOOT, semente=C.SEMENTE):
 
 
 def decomposicao(treino, teste, tau):
-    teste = teste.copy()
-    s = fator_s(treino["y"], treino["p75_6"], tau)
-    s_pin = fator_s_pinball(treino["y"], treino["p75_6"], tau)
-    s_m3 = fator_s(treino["y"], treino["media_3"], tau)
-    teste["B0_p75_6"] = teste["p75_6"]
-    teste["B1_s_x_p75_6"] = s * teste["p75_6"]
-    teste["B1pin_s_x_p75_6"] = s_pin * teste["p75_6"]
-    teste["ref_media3"] = teste["media_3"]
-    teste["ref_s_x_media3"] = s_m3 * teste["media_3"]
+    """Decomposição B0 -> B1 -> M para cada base de C.BASES_B0; os modelos são treinados UMA vez.
 
+    As duas decomposições comparam as mesmas previsões dos modelos; só muda a régua (B0 e B1).
+    """
+    teste = teste.copy()
     modelos = ajustar_modelos(treino, tau)
     custo = {}
     for nome, m in modelos.items():
@@ -191,19 +189,29 @@ def decomposicao(treino, teste, tau):
         custo[nome] = {"tempo_busca_s": round(m["tempo_busca_s"], 2),
                        "tempo_inferencia_ms": round(1000 * (time.perf_counter() - t0), 2)}
     nomes_m = list(modelos)
-    abord = ["B0_p75_6", "B1_s_x_p75_6", *nomes_m, "B1pin_s_x_p75_6", "ref_media3", "ref_s_x_media3"]
-    tab = quadro(teste, abord, tau)
-    pares = [("B1_s_x_p75_6", "B0_p75_6")] + [(m, "B1_s_x_p75_6") for m in nomes_m] \
-        + [("ref_s_x_media3", "ref_media3")]
+
+    bases = {}
+    for base, col in C.BASES_B0.items():
+        s = fator_s(treino["y"], treino[col], tau)
+        s_pin = fator_s_pinball(treino["y"], treino[col], tau)
+        b0, b1 = f"B0_{base}", f"B1_{base}"
+        teste[b0], teste[b1] = teste[col], s * teste[col]
+        teste[f"B1pin_{base}"] = s_pin * teste[col]
+        pares = [(b1, b0)] + [(m, b1) for m in nomes_m] + [(m, b0) for m in nomes_m]
+        bases[base] = {
+            "coluna": col, "s_cobertura_treino": s, "s_pinball_treino": s_pin,
+            "cobertura_treino_B0_%": float(100 * np.mean(treino["y"] <= treino[col])),
+            "cobertura_treino_B1_%": float(100 * np.mean(treino["y"] <= s * treino[col])),
+            "efeitos": bootstrap_diferencas(teste, pares, tau),
+        }
+    abord = [c for base in C.BASES_B0 for c in (f"B0_{base}", f"B1_{base}", f"B1pin_{base}")] + nomes_m
+    # as duas regras entre si (P75 6m − média 3m): sustenta a troca do B0 principal
+    entre_bases = bootstrap_diferencas(teste, [("B0_p75_6", "B0_media3"), ("B1_p75_6", "B1_media3")], tau)
     return {
-        "tau": tau,
-        "s_cobertura_treino": s, "s_pinball_treino": s_pin, "s_media3_treino": s_m3,
-        "cobertura_treino_B0_%": float(100 * np.mean(treino["y"] <= treino["p75_6"])),
-        "cobertura_treino_B1_%": float(100 * np.mean(treino["y"] <= s * treino["p75_6"])),
+        "tau": tau, "bases": bases, "entre_bases": entre_bases,
         "modelos": {n: {"params": m["params"], "cv_pinball_rel_%": 100 * m["cv_pinball"] / treino["y"].mean(),
                         **custo[n]} for n, m in modelos.items()},
-        "quadro": tab,
-        "efeitos": bootstrap_diferencas(teste, pares, tau),
+        "quadro": quadro(teste, abord, tau),
     }, teste, modelos
 
 
@@ -286,6 +294,13 @@ def _arred(o, n=3):
     return o
 
 
+def versao_dados(fonte):
+    """SHA-256 dos arquivos de entrada: identifica a versão exata dos dados sem expor nenhum valor."""
+    _, cfg, pasta = carregar.escolher_fonte(fonte)
+    arquivos = [cfg["arquivo"]] + ([C.ARQUIVO_PRODUTOS] if fonte == "real" else [])
+    return {a: hashlib.sha256((pasta / a).read_bytes()).hexdigest() for a in arquivos}
+
+
 def main(fonte="auto"):
     sys.stdout.reconfigure(encoding="utf-8")   # console do Windows (cp1252) não tem Δ, −
     f, painel, info_carga, _, corte = M.tabela_features(fonte)
@@ -312,18 +327,19 @@ def main(fonte="auto"):
     # T3: quadro de comparação + unidade de decisão (τ principal)
     tau = C.QUANTIL_OPERACIONAL
     r = t1[f"tau_{tau:g}"]
-    abord_t3 = ["B0_p75_6", "B1_s_x_p75_6", "M_linear_quantil", "M_arvore_fator", "M_gb_quantil", "ref_media3"]
+    abord_t3 = ["B0_media3", "B1_media3", "B0_p75_6", "B1_p75_6", "M_linear_quantil", "M_arvore_fator",
+                "M_gb_quantil"]
     quadro_t3 = r["quadro"].set_index("abordagem").loc[abord_t3].reset_index()
     hip = {n: str(m["params"]) for n, m in r["modelos"].items()}
-    hip |= {"B0_p75_6": "janela 6 meses, P75 (regra fixa)", "ref_media3": "janela 3 meses (regra fixa)",
-            "B1_s_x_p75_6": f"s = {r['s_cobertura_treino']:.3f} (cobertura no treino)"}
+    hip |= {"B0_media3": "média dos 3 últimos meses (regra fixa)", "B0_p75_6": "P75 dos 6 últimos meses (regra fixa)"}
+    hip |= {f"B1_{b}": f"s = {v['s_cobertura_treino']:.3f} (cobertura no treino)" for b, v in r["bases"].items()}
     quadro_t3["hiperparametros"] = quadro_t3["abordagem"].map(hip)
     quadro_t3["tempo_busca_s"] = quadro_t3["abordagem"].map({n: m["tempo_busca_s"] for n, m in r["modelos"].items()})
     quadro_t3["tempo_inferencia_ms"] = quadro_t3["abordagem"].map(
         {n: m["tempo_inferencia_ms"] for n, m in r["modelos"].items()})
     mapa, media_bob = D.m2_por_bobina(info_carga["fonte"])
     decisao = D.unidade_decisao(teste_q, abord_t3, mapa, media_bob)
-    ganhos = [D.ganho_vs(decisao, "M_gb_quantil", c, v) for c in ["B0_p75_6", "ref_media3"]
+    ganhos = [D.ganho_vs(decisao, "M_gb_quantil", c, v) for c in ["B0_media3", "B0_p75_6"]
               for v in ["previsao_m2", "pedido_bobinas_com_piso"]]
     t3 = {"quadro": quadro_t3, "decisao": decisao, "ganho_gb": ganhos,
           "linhas_teste_sem_m2_por_bobina": int((~teste_q[C.COL_SKU].isin(list(mapa))).sum()) if mapa
@@ -337,6 +353,7 @@ def main(fonte="auto"):
     res = {"fonte": info_carga["fonte"], "corte_treino": str(corte), "linhas_treino": len(treino),
            "linhas_teste": len(teste), "codigos_teste": int(teste[C.COL_SKU].nunique()),
            "grades": {"linear": C.GRADE_LINEAR, "arvore": C.GRADE_ARVORE, "gb": C.GRADE_GB},
+           "versao_dados": versao_dados(info_carga["fonte"]),
            "T1": t1, "T2": t2, "T3": t3, "T4": t4}
     (saida / "e06.json").write_text(json.dumps(_arred(res), ensure_ascii=False, indent=2, default=str),
                                     encoding="utf-8")
@@ -348,15 +365,17 @@ def imprimir(t1, t2, t3, t4):
     """Só métricas relativas e contagens: m², bobinas e containers ficam no JSON."""
     pd.set_option("display.width", 200)
     for k, r in t1.items():
-        print(f"\n=== T1 {k} | s={r['s_cobertura_treino']:.3f} (pinball: {r['s_pinball_treino']:.3f}) | "
-              f"cobertura treino B0={r['cobertura_treino_B0_%']:.0f}% B1={r['cobertura_treino_B1_%']:.0f}%")
+        print(f"\n=== T1 {k}")
         print(r["quadro"].drop(columns="MAE").round(1).to_string(index=False))
-        for par, e in r["efeitos"].items():
-            print(f"  {par}: {e['ponto']:+.2f} p.p.  IC95 [{e['ic95'][0]:+.2f}, {e['ic95'][1]:+.2f}]  "
-                  f"melhora em {e['pct_boot_melhora']:.0f}% do bootstrap")
         for n, m in r["modelos"].items():
             print(f"  {n}: {m['params']} | CV pinball_rel {m['cv_pinball_rel_%']:.1f}% | "
                   f"busca {m['tempo_busca_s']}s | inferência {m['tempo_inferencia_ms']}ms")
+        for base, b in r["bases"].items():
+            print(f"  [{base}] s={b['s_cobertura_treino']:.3f} (pinball: {b['s_pinball_treino']:.3f}) | "
+                  f"cobertura treino B0={b['cobertura_treino_B0_%']:.0f}% B1={b['cobertura_treino_B1_%']:.0f}%")
+            for par, e in b["efeitos"].items():
+                print(f"    {par}: {e['ponto']:+.2f} p.p.  IC95 [{e['ic95'][0]:+.2f}, {e['ic95'][1]:+.2f}]  "
+                      f"melhora em {e['pct_boot_melhora']:.0f}% do bootstrap")
     print("\n=== T2 (x = venda ÷ média do código)")
     for variante in ["todos_os_meses", "sem_meses_com_ruptura"]:
         print(f"-- {variante}")
@@ -376,7 +395,7 @@ def imprimir(t1, t2, t3, t4):
               f"falta {g['delta_falta_%_demanda']:+.1f} p.p., meses-código com falta "
               f"{g['delta_meses_codigo_com_falta_por_ciclo']:+.1f}")
     print("\n=== T4 grupos: pinball rel. à média do grupo | viés | cobertura | % do custo que é falta")
-    nome = {"B0_p75_6": "B0", "ref_media3": "media3", "M_gb_quantil": "GB"}
+    nome = {"B0_media3": "media3", "B0_p75_6": "P75_6", "M_gb_quantil": "GB"}
     fmt = lambda x, f: "  nan" if x is None else format(x, f)
     for col, gs in t4["grupos"].items():
         print(f"-- {col}")

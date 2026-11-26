@@ -50,22 +50,170 @@
       ]
     }
   },
+  "versao_dados": {
+    "vendas_amostra.csv": "36a33f997a8d486fb4a83b0fdc686aff857b46446feed6037dcae86419f80143"
+  },
   "T1": {
     "tau_0.75": {
       "tau": 0.75,
-      "s_cobertura_treino": 1.208,
-      "s_pinball_treino": 1.151,
-      "s_media3_treino": 1.465,
-      "cobertura_treino_B0_%": 63.254,
-      "cobertura_treino_B1_%": 74.603,
+      "bases": {
+        "media3": {
+          "coluna": "media_3",
+          "s_cobertura_treino": 1.465,
+          "s_pinball_treino": 1.323,
+          "cobertura_treino_B0_%": 52.54,
+          "cobertura_treino_B1_%": 74.683,
+          "efeitos": {
+            "B1_media3 - B0_media3": {
+              "ponto": 4.299,
+              "ic95": [
+                -0.555,
+                9.949
+              ],
+              "pct_boot_melhora": 4.2
+            },
+            "M_linear_quantil - B1_media3": {
+              "ponto": -7.916,
+              "ic95": [
+                -13.504,
+                -3.427
+              ],
+              "pct_boot_melhora": 100.0
+            },
+            "M_arvore_fator - B1_media3": {
+              "ponto": -5.6,
+              "ic95": [
+                -9.804,
+                -1.955
+              ],
+              "pct_boot_melhora": 99.85
+            },
+            "M_gb_quantil - B1_media3": {
+              "ponto": -6.272,
+              "ic95": [
+                -12.919,
+                -0.832
+              ],
+              "pct_boot_melhora": 99.1
+            },
+            "M_linear_quantil - B0_media3": {
+              "ponto": -3.617,
+              "ic95": [
+                -7.102,
+                -0.433
+              ],
+              "pct_boot_melhora": 98.6
+            },
+            "M_arvore_fator - B0_media3": {
+              "ponto": -1.301,
+              "ic95": [
+                -5.572,
+                3.62
+              ],
+              "pct_boot_melhora": 71.9
+            },
+            "M_gb_quantil - B0_media3": {
+              "ponto": -1.973,
+              "ic95": [
+                -6.521,
+                2.146
+              ],
+              "pct_boot_melhora": 79.95
+            }
+          }
+        },
+        "p75_6": {
+          "coluna": "p75_6",
+          "s_cobertura_treino": 1.208,
+          "s_pinball_treino": 1.151,
+          "cobertura_treino_B0_%": 63.254,
+          "cobertura_treino_B1_%": 74.603,
+          "efeitos": {
+            "B1_p75_6 - B0_p75_6": {
+              "ponto": 2.108,
+              "ic95": [
+                -0.754,
+                5.762
+              ],
+              "pct_boot_melhora": 7.65
+            },
+            "M_linear_quantil - B1_p75_6": {
+              "ponto": -6.482,
+              "ic95": [
+                -10.516,
+                -2.365
+              ],
+              "pct_boot_melhora": 99.85
+            },
+            "M_arvore_fator - B1_p75_6": {
+              "ponto": -4.165,
+              "ic95": [
+                -7.409,
+                -0.295
+              ],
+              "pct_boot_melhora": 98.1
+            },
+            "M_gb_quantil - B1_p75_6": {
+              "ponto": -4.837,
+              "ic95": [
+                -9.571,
+                -0.886
+              ],
+              "pct_boot_melhora": 99.25
+            },
+            "M_linear_quantil - B0_p75_6": {
+              "ponto": -4.374,
+              "ic95": [
+                -6.953,
+                -1.136
+              ],
+              "pct_boot_melhora": 99.55
+            },
+            "M_arvore_fator - B0_p75_6": {
+              "ponto": -2.057,
+              "ic95": [
+                -5.971,
+                2.788
+              ],
+              "pct_boot_melhora": 79.85
+            },
+            "M_gb_quantil - B0_p75_6": {
+              "ponto": -2.73,
+              "ic95": [
+                -5.477,
+                0.52
+              ],
+              "pct_boot_melhora": 94.65
+            }
+          }
+        }
+      },
+      "entre_bases": {
+        "B0_p75_6 - B0_media3": {
+          "ponto": 0.757,
+          "ic95": [
+            -4.266,
+            5.046
+          ],
+          "pct_boot_melhora": 40.25
+        },
+        "B1_p75_6 - B1_media3": {
+          "ponto": -1.435,
+          "ic95": [
+            -5.884,
+            2.379
+          ],
+          "pct_boot_melhora": 75.9
+        }
+      },
       "modelos": {
         "M_linear_quantil": {
           "params": {
             "alpha": 0.01
           },
           "cv_pinball_rel_%": 25.85,
-          "tempo_busca_s": 0.78,
-          "tempo_inferencia_ms": 6.81
+          "tempo_busca_s": 1.17,
+          "tempo_inferencia_ms": 7.48
         },
         "M_arvore_fator": {
           "params": {
@@ -74,8 +222,8 @@
             "s_oof": 1.328
           },
           "cv_pinball_rel_%": 25.644,
-          "tempo_busca_s": 0.45,
-          "tempo_inferencia_ms": 6.4
+          "tempo_busca_s": 0.85,
+          "tempo_inferencia_ms": 5.19
         },
         "M_gb_quantil": {
           "params": {
@@ -85,11 +233,38 @@
             "n_estimators": 100
           },
           "cv_pinball_rel_%": 25.659,
-          "tempo_busca_s": 32.6,
+          "tempo_busca_s": 23.75,
           "tempo_inferencia_ms": 6.19
         }
       },
       "quadro": [
+        {
+          "abordagem": "B0_media3",
+          "n": 80,
+          "pinball_rel_%": 28.665,
+          "MAE": 158.242,
+          "WAPE_%": 71.543,
+          "vies_%": 28.427,
+          "cobertura_%": 62.5
+        },
+        {
+          "abordagem": "B1_media3",
+          "n": 80,
+          "pinball_rel_%": 32.964,
+          "MAE": 243.313,
+          "WAPE_%": 110.005,
+          "vies_%": 88.154,
+          "cobertura_%": 81.25
+        },
+        {
+          "abordagem": "B1pin_media3",
+          "n": 80,
+          "pinball_rel_%": 30.506,
+          "MAE": 212.31,
+          "WAPE_%": 95.988,
+          "vies_%": 69.952,
+          "cobertura_%": 76.25
+        },
         {
           "abordagem": "B0_p75_6",
           "n": 80,
@@ -100,13 +275,22 @@
           "cobertura_%": 72.5
         },
         {
-          "abordagem": "B1_s_x_p75_6",
+          "abordagem": "B1_p75_6",
           "n": 80,
           "pinball_rel_%": 31.529,
           "MAE": 217.346,
           "WAPE_%": 98.265,
           "vies_%": 70.413,
           "cobertura_%": 81.25
+        },
+        {
+          "abordagem": "B1pin_p75_6",
+          "n": 80,
+          "pinball_rel_%": 30.897,
+          "MAE": 205.68,
+          "WAPE_%": 92.99,
+          "vies_%": 62.391,
+          "cobertura_%": 78.75
         },
         {
           "abordagem": "M_linear_quantil",
@@ -134,93 +318,169 @@
           "WAPE_%": 74.933,
           "vies_%": 43.098,
           "cobertura_%": 80.0
-        },
-        {
-          "abordagem": "B1pin_s_x_p75_6",
-          "n": 80,
-          "pinball_rel_%": 30.897,
-          "MAE": 205.68,
-          "WAPE_%": 92.99,
-          "vies_%": 62.391,
-          "cobertura_%": 78.75
-        },
-        {
-          "abordagem": "ref_media3",
-          "n": 80,
-          "pinball_rel_%": 28.665,
-          "MAE": 158.242,
-          "WAPE_%": 71.543,
-          "vies_%": 28.427,
-          "cobertura_%": 62.5
-        },
-        {
-          "abordagem": "ref_s_x_media3",
-          "n": 80,
-          "pinball_rel_%": 32.964,
-          "MAE": 243.313,
-          "WAPE_%": 110.005,
-          "vies_%": 88.154,
-          "cobertura_%": 81.25
         }
-      ],
-      "efeitos": {
-        "B1_s_x_p75_6 - B0_p75_6": {
-          "ponto": 2.108,
-          "ic95": [
-            -0.754,
-            5.762
-          ],
-          "pct_boot_melhora": 7.65
-        },
-        "M_linear_quantil - B1_s_x_p75_6": {
-          "ponto": -6.482,
-          "ic95": [
-            -10.516,
-            -2.365
-          ],
-          "pct_boot_melhora": 99.85
-        },
-        "M_arvore_fator - B1_s_x_p75_6": {
-          "ponto": -4.165,
-          "ic95": [
-            -7.409,
-            -0.295
-          ],
-          "pct_boot_melhora": 98.1
-        },
-        "M_gb_quantil - B1_s_x_p75_6": {
-          "ponto": -4.837,
-          "ic95": [
-            -9.571,
-            -0.886
-          ],
-          "pct_boot_melhora": 99.25
-        },
-        "ref_s_x_media3 - ref_media3": {
-          "ponto": 4.299,
-          "ic95": [
-            -0.555,
-            9.949
-          ],
-          "pct_boot_melhora": 4.2
-        }
-      }
+      ]
     },
     "tau_0.6": {
       "tau": 0.6,
-      "s_cobertura_treino": 0.959,
-      "s_pinball_treino": 0.898,
-      "s_media3_treino": 1.125,
-      "cobertura_treino_B0_%": 63.254,
-      "cobertura_treino_B1_%": 59.683,
+      "bases": {
+        "media3": {
+          "coluna": "media_3",
+          "s_cobertura_treino": 1.125,
+          "s_pinball_treino": 1.035,
+          "cobertura_treino_B0_%": 52.54,
+          "cobertura_treino_B1_%": 59.921,
+          "efeitos": {
+            "B1_media3 - B0_media3": {
+              "ponto": 2.375,
+              "ic95": [
+                0.601,
+                4.621
+              ],
+              "pct_boot_melhora": 0.2
+            },
+            "M_linear_quantil - B1_media3": {
+              "ponto": -7.105,
+              "ic95": [
+                -12.567,
+                -2.821
+              ],
+              "pct_boot_melhora": 99.95
+            },
+            "M_arvore_fator - B1_media3": {
+              "ponto": -5.841,
+              "ic95": [
+                -11.273,
+                -1.223
+              ],
+              "pct_boot_melhora": 99.3
+            },
+            "M_gb_quantil - B1_media3": {
+              "ponto": -5.532,
+              "ic95": [
+                -11.253,
+                -0.891
+              ],
+              "pct_boot_melhora": 98.95
+            },
+            "M_linear_quantil - B0_media3": {
+              "ponto": -4.73,
+              "ic95": [
+                -8.437,
+                -1.756
+              ],
+              "pct_boot_melhora": 99.8
+            },
+            "M_arvore_fator - B0_media3": {
+              "ponto": -3.466,
+              "ic95": [
+                -7.307,
+                0.012
+              ],
+              "pct_boot_melhora": 97.4
+            },
+            "M_gb_quantil - B0_media3": {
+              "ponto": -3.157,
+              "ic95": [
+                -7.256,
+                0.592
+              ],
+              "pct_boot_melhora": 94.8
+            }
+          }
+        },
+        "p75_6": {
+          "coluna": "p75_6",
+          "s_cobertura_treino": 0.959,
+          "s_pinball_treino": 0.898,
+          "cobertura_treino_B0_%": 63.254,
+          "cobertura_treino_B1_%": 59.683,
+          "efeitos": {
+            "B1_p75_6 - B0_p75_6": {
+              "ponto": -1.126,
+              "ic95": [
+                -2.03,
+                -0.413
+              ],
+              "pct_boot_melhora": 99.95
+            },
+            "M_linear_quantil - B1_p75_6": {
+              "ponto": -6.26,
+              "ic95": [
+                -10.693,
+                -1.864
+              ],
+              "pct_boot_melhora": 99.75
+            },
+            "M_arvore_fator - B1_p75_6": {
+              "ponto": -4.996,
+              "ic95": [
+                -8.742,
+                -1.499
+              ],
+              "pct_boot_melhora": 99.75
+            },
+            "M_gb_quantil - B1_p75_6": {
+              "ponto": -4.687,
+              "ic95": [
+                -9.032,
+                -0.934
+              ],
+              "pct_boot_melhora": 99.25
+            },
+            "M_linear_quantil - B0_p75_6": {
+              "ponto": -7.386,
+              "ic95": [
+                -12.499,
+                -2.625
+              ],
+              "pct_boot_melhora": 99.9
+            },
+            "M_arvore_fator - B0_p75_6": {
+              "ponto": -6.122,
+              "ic95": [
+                -10.621,
+                -2.041
+              ],
+              "pct_boot_melhora": 99.85
+            },
+            "M_gb_quantil - B0_p75_6": {
+              "ponto": -5.813,
+              "ic95": [
+                -10.902,
+                -1.661
+              ],
+              "pct_boot_melhora": 99.7
+            }
+          }
+        }
+      },
+      "entre_bases": {
+        "B0_p75_6 - B0_media3": {
+          "ponto": 2.656,
+          "ic95": [
+            -1.48,
+            6.235
+          ],
+          "pct_boot_melhora": 10.5
+        },
+        "B1_p75_6 - B1_media3": {
+          "ponto": -0.845,
+          "ic95": [
+            -5.063,
+            2.72
+          ],
+          "pct_boot_melhora": 67.25
+        }
+      },
       "modelos": {
         "M_linear_quantil": {
           "params": {
             "alpha": 0.01
           },
           "cv_pinball_rel_%": 26.692,
-          "tempo_busca_s": 0.84,
-          "tempo_inferencia_ms": 7.62
+          "tempo_busca_s": 1.24,
+          "tempo_inferencia_ms": 4.88
         },
         "M_arvore_fator": {
           "params": {
@@ -229,8 +489,8 @@
             "s_oof": 0.999
           },
           "cv_pinball_rel_%": 27.994,
-          "tempo_busca_s": 0.72,
-          "tempo_inferencia_ms": 6.07
+          "tempo_busca_s": 0.79,
+          "tempo_inferencia_ms": 4.31
         },
         "M_gb_quantil": {
           "params": {
@@ -240,11 +500,38 @@
             "n_estimators": 50
           },
           "cv_pinball_rel_%": 27.866,
-          "tempo_busca_s": 21.79,
-          "tempo_inferencia_ms": 5.79
+          "tempo_busca_s": 23.51,
+          "tempo_inferencia_ms": 4.07
         }
       },
       "quadro": [
+        {
+          "abordagem": "B0_media3",
+          "n": 80,
+          "pinball_rel_%": 32.929,
+          "MAE": 158.242,
+          "WAPE_%": 71.543,
+          "vies_%": 28.427,
+          "cobertura_%": 62.5
+        },
+        {
+          "abordagem": "B1_media3",
+          "n": 80,
+          "pinball_rel_%": 35.304,
+          "MAE": 175.822,
+          "WAPE_%": 79.491,
+          "vies_%": 44.419,
+          "cobertura_%": 68.75
+        },
+        {
+          "abordagem": "B1pin_media3",
+          "n": 80,
+          "pinball_rel_%": 33.51,
+          "MAE": 162.783,
+          "WAPE_%": 73.596,
+          "vies_%": 32.878,
+          "cobertura_%": 63.75
+        },
         {
           "abordagem": "B0_p75_6",
           "n": 80,
@@ -255,13 +542,22 @@
           "cobertura_%": 72.5
         },
         {
-          "abordagem": "B1_s_x_p75_6",
+          "abordagem": "B1_p75_6",
           "n": 80,
           "pinball_rel_%": 34.459,
           "MAE": 168.036,
           "WAPE_%": 75.971,
           "vies_%": 35.267,
           "cobertura_%": 71.25
+        },
+        {
+          "abordagem": "B1pin_p75_6",
+          "n": 80,
+          "pinball_rel_%": 32.878,
+          "MAE": 157.264,
+          "WAPE_%": 71.101,
+          "vies_%": 26.727,
+          "cobertura_%": 67.5
         },
         {
           "abordagem": "M_linear_quantil",
@@ -289,93 +585,169 @@
           "WAPE_%": 62.536,
           "vies_%": 14.962,
           "cobertura_%": 60.0
-        },
-        {
-          "abordagem": "B1pin_s_x_p75_6",
-          "n": 80,
-          "pinball_rel_%": 32.878,
-          "MAE": 157.264,
-          "WAPE_%": 71.101,
-          "vies_%": 26.727,
-          "cobertura_%": 67.5
-        },
-        {
-          "abordagem": "ref_media3",
-          "n": 80,
-          "pinball_rel_%": 32.929,
-          "MAE": 158.242,
-          "WAPE_%": 71.543,
-          "vies_%": 28.427,
-          "cobertura_%": 62.5
-        },
-        {
-          "abordagem": "ref_s_x_media3",
-          "n": 80,
-          "pinball_rel_%": 35.304,
-          "MAE": 175.822,
-          "WAPE_%": 79.491,
-          "vies_%": 44.419,
-          "cobertura_%": 68.75
         }
-      ],
-      "efeitos": {
-        "B1_s_x_p75_6 - B0_p75_6": {
-          "ponto": -1.126,
-          "ic95": [
-            -2.03,
-            -0.413
-          ],
-          "pct_boot_melhora": 99.95
-        },
-        "M_linear_quantil - B1_s_x_p75_6": {
-          "ponto": -6.26,
-          "ic95": [
-            -10.693,
-            -1.864
-          ],
-          "pct_boot_melhora": 99.75
-        },
-        "M_arvore_fator - B1_s_x_p75_6": {
-          "ponto": -4.996,
-          "ic95": [
-            -8.742,
-            -1.499
-          ],
-          "pct_boot_melhora": 99.75
-        },
-        "M_gb_quantil - B1_s_x_p75_6": {
-          "ponto": -4.687,
-          "ic95": [
-            -9.032,
-            -0.934
-          ],
-          "pct_boot_melhora": 99.25
-        },
-        "ref_s_x_media3 - ref_media3": {
-          "ponto": 2.375,
-          "ic95": [
-            0.601,
-            4.621
-          ],
-          "pct_boot_melhora": 0.2
-        }
-      }
+      ]
     },
     "tau_0.9": {
       "tau": 0.9,
-      "s_cobertura_treino": 1.829,
-      "s_pinball_treino": 1.628,
-      "s_media3_treino": 2.297,
-      "cobertura_treino_B0_%": 63.254,
-      "cobertura_treino_B1_%": 89.444,
+      "bases": {
+        "media3": {
+          "coluna": "media_3",
+          "s_cobertura_treino": 2.297,
+          "s_pinball_treino": 1.917,
+          "cobertura_treino_B0_%": 52.54,
+          "cobertura_treino_B1_%": 89.365,
+          "efeitos": {
+            "B1_media3 - B0_media3": {
+              "ponto": -1.246,
+              "ic95": [
+                -10.7,
+                7.611
+              ],
+              "pct_boot_melhora": 59.15
+            },
+            "M_linear_quantil - B1_media3": {
+              "ponto": -7.935,
+              "ic95": [
+                -12.993,
+                -3.018
+              ],
+              "pct_boot_melhora": 99.9
+            },
+            "M_arvore_fator - B1_media3": {
+              "ponto": -5.368,
+              "ic95": [
+                -10.038,
+                0.23
+              ],
+              "pct_boot_melhora": 96.95
+            },
+            "M_gb_quantil - B1_media3": {
+              "ponto": -5.994,
+              "ic95": [
+                -12.791,
+                -0.293
+              ],
+              "pct_boot_melhora": 98.1
+            },
+            "M_linear_quantil - B0_media3": {
+              "ponto": -9.181,
+              "ic95": [
+                -15.532,
+                -3.41
+              ],
+              "pct_boot_melhora": 100.0
+            },
+            "M_arvore_fator - B0_media3": {
+              "ponto": -6.614,
+              "ic95": [
+                -14.872,
+                1.881
+              ],
+              "pct_boot_melhora": 93.3
+            },
+            "M_gb_quantil - B0_media3": {
+              "ponto": -7.24,
+              "ic95": [
+                -14.545,
+                -1.249
+              ],
+              "pct_boot_melhora": 99.05
+            }
+          }
+        },
+        "p75_6": {
+          "coluna": "p75_6",
+          "s_cobertura_treino": 1.829,
+          "s_pinball_treino": 1.628,
+          "cobertura_treino_B0_%": 63.254,
+          "cobertura_treino_B1_%": 89.444,
+          "efeitos": {
+            "B1_p75_6 - B0_p75_6": {
+              "ponto": -3.979,
+              "ic95": [
+                -11.532,
+                6.032
+              ],
+              "pct_boot_melhora": 80.2
+            },
+            "M_linear_quantil - B1_p75_6": {
+              "ponto": -4.059,
+              "ic95": [
+                -8.176,
+                -0.423
+              ],
+              "pct_boot_melhora": 98.6
+            },
+            "M_arvore_fator - B1_p75_6": {
+              "ponto": -1.492,
+              "ic95": [
+                -4.407,
+                1.772
+              ],
+              "pct_boot_melhora": 82.95
+            },
+            "M_gb_quantil - B1_p75_6": {
+              "ponto": -2.118,
+              "ic95": [
+                -7.379,
+                2.456
+              ],
+              "pct_boot_melhora": 81.2
+            },
+            "M_linear_quantil - B0_p75_6": {
+              "ponto": -8.038,
+              "ic95": [
+                -13.393,
+                -1.351
+              ],
+              "pct_boot_melhora": 99.15
+            },
+            "M_arvore_fator - B0_p75_6": {
+              "ponto": -5.471,
+              "ic95": [
+                -13.654,
+                4.617
+              ],
+              "pct_boot_melhora": 85.95
+            },
+            "M_gb_quantil - B0_p75_6": {
+              "ponto": -6.097,
+              "ic95": [
+                -11.451,
+                0.591
+              ],
+              "pct_boot_melhora": 96.35
+            }
+          }
+        }
+      },
+      "entre_bases": {
+        "B0_p75_6 - B0_media3": {
+          "ponto": -1.143,
+          "ic95": [
+            -7.231,
+            4.614
+          ],
+          "pct_boot_melhora": 66.25
+        },
+        "B1_p75_6 - B1_media3": {
+          "ponto": -3.876,
+          "ic95": [
+            -8.038,
+            0.193
+          ],
+          "pct_boot_melhora": 97.1
+        }
+      },
       "modelos": {
         "M_linear_quantil": {
           "params": {
             "alpha": 0.01
           },
           "cv_pinball_rel_%": 17.037,
-          "tempo_busca_s": 0.69,
-          "tempo_inferencia_ms": 4.95
+          "tempo_busca_s": 1.1,
+          "tempo_inferencia_ms": 4.73
         },
         "M_arvore_fator": {
           "params": {
@@ -384,8 +756,8 @@
             "s_oof": 2.004
           },
           "cv_pinball_rel_%": 16.527,
-          "tempo_busca_s": 0.42,
-          "tempo_inferencia_ms": 4.16
+          "tempo_busca_s": 0.78,
+          "tempo_inferencia_ms": 4.1
         },
         "M_gb_quantil": {
           "params": {
@@ -395,11 +767,38 @@
             "n_estimators": 50
           },
           "cv_pinball_rel_%": 17.137,
-          "tempo_busca_s": 24.68,
-          "tempo_inferencia_ms": 5.29
+          "tempo_busca_s": 22.98,
+          "tempo_inferencia_ms": 4.0
         }
       },
       "quadro": [
+        {
+          "abordagem": "B0_media3",
+          "n": 80,
+          "pinball_rel_%": 24.401,
+          "MAE": 158.242,
+          "WAPE_%": 71.543,
+          "vies_%": 28.427,
+          "cobertura_%": 62.5
+        },
+        {
+          "abordagem": "B1_media3",
+          "n": 80,
+          "pinball_rel_%": 23.155,
+          "MAE": 447.47,
+          "WAPE_%": 202.307,
+          "vies_%": 194.995,
+          "cobertura_%": 92.5
+        },
+        {
+          "abordagem": "B1pin_media3",
+          "n": 80,
+          "pinball_rel_%": 20.916,
+          "MAE": 351.183,
+          "WAPE_%": 158.774,
+          "vies_%": 146.176,
+          "cobertura_%": 90.0
+        },
         {
           "abordagem": "B0_p75_6",
           "n": 80,
@@ -410,13 +809,22 @@
           "cobertura_%": 72.5
         },
         {
-          "abordagem": "B1_s_x_p75_6",
+          "abordagem": "B1_p75_6",
           "n": 80,
           "pinball_rel_%": 19.279,
           "MAE": 364.968,
           "WAPE_%": 165.006,
           "vies_%": 158.061,
           "cobertura_%": 93.75
+        },
+        {
+          "abordagem": "B1pin_p75_6",
+          "n": 80,
+          "pinball_rel_%": 18.749,
+          "MAE": 312.502,
+          "WAPE_%": 141.286,
+          "vies_%": 129.736,
+          "cobertura_%": 91.25
         },
         {
           "abordagem": "M_linear_quantil",
@@ -444,77 +852,8 @@
           "WAPE_%": 118.752,
           "vies_%": 105.539,
           "cobertura_%": 91.25
-        },
-        {
-          "abordagem": "B1pin_s_x_p75_6",
-          "n": 80,
-          "pinball_rel_%": 18.749,
-          "MAE": 312.502,
-          "WAPE_%": 141.286,
-          "vies_%": 129.736,
-          "cobertura_%": 91.25
-        },
-        {
-          "abordagem": "ref_media3",
-          "n": 80,
-          "pinball_rel_%": 24.401,
-          "MAE": 158.242,
-          "WAPE_%": 71.543,
-          "vies_%": 28.427,
-          "cobertura_%": 62.5
-        },
-        {
-          "abordagem": "ref_s_x_media3",
-          "n": 80,
-          "pinball_rel_%": 23.155,
-          "MAE": 447.47,
-          "WAPE_%": 202.307,
-          "vies_%": 194.995,
-          "cobertura_%": 92.5
         }
-      ],
-      "efeitos": {
-        "B1_s_x_p75_6 - B0_p75_6": {
-          "ponto": -3.979,
-          "ic95": [
-            -11.532,
-            6.032
-          ],
-          "pct_boot_melhora": 80.2
-        },
-        "M_linear_quantil - B1_s_x_p75_6": {
-          "ponto": -4.059,
-          "ic95": [
-            -8.176,
-            -0.423
-          ],
-          "pct_boot_melhora": 98.6
-        },
-        "M_arvore_fator - B1_s_x_p75_6": {
-          "ponto": -1.492,
-          "ic95": [
-            -4.407,
-            1.772
-          ],
-          "pct_boot_melhora": 82.95
-        },
-        "M_gb_quantil - B1_s_x_p75_6": {
-          "ponto": -2.118,
-          "ic95": [
-            -7.379,
-            2.456
-          ],
-          "pct_boot_melhora": 81.2
-        },
-        "ref_s_x_media3 - ref_media3": {
-          "ponto": -1.246,
-          "ic95": [
-            -10.7,
-            7.611
-          ],
-          "pct_boot_melhora": 59.15
-        }
-      }
+      ]
     }
   },
   "T2": {
@@ -691,6 +1030,30 @@
   "T3": {
     "quadro": [
       {
+        "abordagem": "B0_media3",
+        "n": 80,
+        "pinball_rel_%": 28.665,
+        "MAE": 158.242,
+        "WAPE_%": 71.543,
+        "vies_%": 28.427,
+        "cobertura_%": 62.5,
+        "hiperparametros": "média dos 3 últimos meses (regra fixa)",
+        "tempo_busca_s": NaN,
+        "tempo_inferencia_ms": NaN
+      },
+      {
+        "abordagem": "B1_media3",
+        "n": 80,
+        "pinball_rel_%": 32.964,
+        "MAE": 243.313,
+        "WAPE_%": 110.005,
+        "vies_%": 88.154,
+        "cobertura_%": 81.25,
+        "hiperparametros": "s = 1.465 (cobertura no treino)",
+        "tempo_busca_s": NaN,
+        "tempo_inferencia_ms": NaN
+      },
+      {
         "abordagem": "B0_p75_6",
         "n": 80,
         "pinball_rel_%": 29.421,
@@ -698,12 +1061,12 @@
         "WAPE_%": 79.388,
         "vies_%": 41.09,
         "cobertura_%": 72.5,
-        "hiperparametros": "janela 6 meses, P75 (regra fixa)",
+        "hiperparametros": "P75 dos 6 últimos meses (regra fixa)",
         "tempo_busca_s": NaN,
         "tempo_inferencia_ms": NaN
       },
       {
-        "abordagem": "B1_s_x_p75_6",
+        "abordagem": "B1_p75_6",
         "n": 80,
         "pinball_rel_%": 31.529,
         "MAE": 217.346,
@@ -723,8 +1086,8 @@
         "vies_%": 41.558,
         "cobertura_%": 78.75,
         "hiperparametros": "{'alpha': 0.01}",
-        "tempo_busca_s": 0.78,
-        "tempo_inferencia_ms": 6.81
+        "tempo_busca_s": 1.17,
+        "tempo_inferencia_ms": 7.48
       },
       {
         "abordagem": "M_arvore_fator",
@@ -735,8 +1098,8 @@
         "vies_%": 52.04,
         "cobertura_%": 76.25,
         "hiperparametros": "{'max_depth': 3, 'min_samples_leaf': 10, 's_oof': 1.328}",
-        "tempo_busca_s": 0.45,
-        "tempo_inferencia_ms": 6.4
+        "tempo_busca_s": 0.85,
+        "tempo_inferencia_ms": 5.19
       },
       {
         "abordagem": "M_gb_quantil",
@@ -747,23 +1110,89 @@
         "vies_%": 43.098,
         "cobertura_%": 80.0,
         "hiperparametros": "{'learning_rate': 0.05, 'max_depth': 2, 'min_samples_leaf': 5, 'n_estimators': 100}",
-        "tempo_busca_s": 32.6,
+        "tempo_busca_s": 23.75,
         "tempo_inferencia_ms": 6.19
-      },
-      {
-        "abordagem": "ref_media3",
-        "n": 80,
-        "pinball_rel_%": 28.665,
-        "MAE": 158.242,
-        "WAPE_%": 71.543,
-        "vies_%": 28.427,
-        "cobertura_%": 62.5,
-        "hiperparametros": "janela 3 meses (regra fixa)",
-        "tempo_busca_s": NaN,
-        "tempo_inferencia_ms": NaN
       }
     ],
     "decisao": [
+      {
+        "abordagem": "B0_media3",
+        "versao": "previsao_m2",
+        "sobra_%_demanda": 49.985,
+        "falta_%_demanda": 21.558,
+        "pedido_%_demanda": 128.427,
+        "meses_codigo_com_falta_por_ciclo": 15.0,
+        "sobra_m2_por_ciclo": 4422.33,
+        "falta_m2_por_ciclo": 1907.333,
+        "pedido_m2_por_ciclo": 11362.357,
+        "pedido_containers_por_ciclo": 0.122,
+        "bobinas_por_ciclo": NaN
+      },
+      {
+        "abordagem": "B0_media3",
+        "versao": "pedido_bobinas_sem_piso",
+        "sobra_%_demanda": 57.888,
+        "falta_%_demanda": 18.34,
+        "pedido_%_demanda": 139.548,
+        "meses_codigo_com_falta_por_ciclo": 10.5,
+        "sobra_m2_por_ciclo": 5121.597,
+        "falta_m2_por_ciclo": 1622.645,
+        "pedido_m2_por_ciclo": 12346.312,
+        "pedido_containers_por_ciclo": 0.132,
+        "bobinas_por_ciclo": 211.5
+      },
+      {
+        "abordagem": "B0_media3",
+        "versao": "pedido_bobinas_com_piso",
+        "sobra_%_demanda": 646.439,
+        "falta_%_demanda": 3.502,
+        "pedido_%_demanda": 742.936,
+        "meses_codigo_com_falta_por_ciclo": 1.5,
+        "sobra_m2_por_ciclo": 57192.765,
+        "falta_m2_por_ciclo": 309.875,
+        "pedido_m2_por_ciclo": 65730.25,
+        "pedido_containers_por_ciclo": 0.704,
+        "bobinas_por_ciclo": 1126.0
+      },
+      {
+        "abordagem": "B1_media3",
+        "versao": "previsao_m2",
+        "sobra_%_demanda": 99.079,
+        "falta_%_demanda": 10.925,
+        "pedido_%_demanda": 188.154,
+        "meses_codigo_com_falta_por_ciclo": 7.5,
+        "sobra_m2_por_ciclo": 8765.891,
+        "falta_m2_por_ciclo": 966.611,
+        "pedido_m2_por_ciclo": 16646.639,
+        "pedido_containers_por_ciclo": 0.178,
+        "bobinas_por_ciclo": NaN
+      },
+      {
+        "abordagem": "B1_media3",
+        "versao": "pedido_bobinas_sem_piso",
+        "sobra_%_demanda": 109.329,
+        "falta_%_demanda": 9.079,
+        "pedido_%_demanda": 200.25,
+        "meses_codigo_com_falta_por_ciclo": 6.0,
+        "sobra_m2_por_ciclo": 9672.74,
+        "falta_m2_por_ciclo": 803.288,
+        "pedido_m2_por_ciclo": 17716.812,
+        "pedido_containers_por_ciclo": 0.19,
+        "bobinas_por_ciclo": 303.5
+      },
+      {
+        "abordagem": "B1_media3",
+        "versao": "pedido_bobinas_com_piso",
+        "sobra_%_demanda": 653.048,
+        "falta_%_demanda": 2.854,
+        "pedido_%_demanda": 750.194,
+        "meses_codigo_com_falta_por_ciclo": 1.0,
+        "sobra_m2_por_ciclo": 57777.53,
+        "falta_m2_por_ciclo": 252.515,
+        "pedido_m2_por_ciclo": 66372.375,
+        "pedido_containers_por_ciclo": 0.711,
+        "bobinas_por_ciclo": 1137.0
+      },
       {
         "abordagem": "B0_p75_6",
         "versao": "previsao_m2",
@@ -804,7 +1233,7 @@
         "bobinas_por_ciclo": 1155.0
       },
       {
-        "abordagem": "B1_s_x_p75_6",
+        "abordagem": "B1_p75_6",
         "versao": "previsao_m2",
         "sobra_%_demanda": 84.339,
         "falta_%_demanda": 13.926,
@@ -817,7 +1246,7 @@
         "bobinas_por_ciclo": NaN
       },
       {
-        "abordagem": "B1_s_x_p75_6",
+        "abordagem": "B1_p75_6",
         "versao": "pedido_bobinas_sem_piso",
         "sobra_%_demanda": 94.943,
         "falta_%_demanda": 12.178,
@@ -830,7 +1259,7 @@
         "bobinas_por_ciclo": 277.0
       },
       {
-        "abordagem": "B1_s_x_p75_6",
+        "abordagem": "B1_p75_6",
         "versao": "pedido_bobinas_com_piso",
         "sobra_%_demanda": 665.092,
         "falta_%_demanda": 1.372,
@@ -958,48 +1387,31 @@
         "pedido_m2_por_ciclo": 70050.0,
         "pedido_containers_por_ciclo": 0.75,
         "bobinas_por_ciclo": 1200.0
-      },
-      {
-        "abordagem": "ref_media3",
-        "versao": "previsao_m2",
-        "sobra_%_demanda": 49.985,
-        "falta_%_demanda": 21.558,
-        "pedido_%_demanda": 128.427,
-        "meses_codigo_com_falta_por_ciclo": 15.0,
-        "sobra_m2_por_ciclo": 4422.33,
-        "falta_m2_por_ciclo": 1907.333,
-        "pedido_m2_por_ciclo": 11362.357,
-        "pedido_containers_por_ciclo": 0.122,
-        "bobinas_por_ciclo": NaN
-      },
-      {
-        "abordagem": "ref_media3",
-        "versao": "pedido_bobinas_sem_piso",
-        "sobra_%_demanda": 57.888,
-        "falta_%_demanda": 18.34,
-        "pedido_%_demanda": 139.548,
-        "meses_codigo_com_falta_por_ciclo": 10.5,
-        "sobra_m2_por_ciclo": 5121.597,
-        "falta_m2_por_ciclo": 1622.645,
-        "pedido_m2_por_ciclo": 12346.312,
-        "pedido_containers_por_ciclo": 0.132,
-        "bobinas_por_ciclo": 211.5
-      },
-      {
-        "abordagem": "ref_media3",
-        "versao": "pedido_bobinas_com_piso",
-        "sobra_%_demanda": 646.439,
-        "falta_%_demanda": 3.502,
-        "pedido_%_demanda": 742.936,
-        "meses_codigo_com_falta_por_ciclo": 1.5,
-        "sobra_m2_por_ciclo": 57192.765,
-        "falta_m2_por_ciclo": 309.875,
-        "pedido_m2_por_ciclo": 65730.25,
-        "pedido_containers_por_ciclo": 0.704,
-        "bobinas_por_ciclo": 1126.0
       }
     ],
     "ganho_gb": [
+      {
+        "versao": "previsao_m2",
+        "modelo": "M_gb_quantil",
+        "contra": "B0_media3",
+        "delta_sobra_m2_por_ciclo": 798.982,
+        "delta_falta_m2_por_ciclo": -499.069,
+        "delta_sobra_%_demanda": 9.031,
+        "delta_falta_%_demanda": -5.641,
+        "delta_meses_codigo_com_falta_por_ciclo": -7.0,
+        "delta_containers_por_ciclo": 0.014
+      },
+      {
+        "versao": "pedido_bobinas_com_piso",
+        "modelo": "M_gb_quantil",
+        "contra": "B0_media3",
+        "delta_sobra_m2_por_ciclo": 4067.235,
+        "delta_falta_m2_por_ciclo": -252.515,
+        "delta_sobra_%_demanda": 45.971,
+        "delta_falta_%_demanda": -2.854,
+        "delta_meses_codigo_com_falta_por_ciclo": -1.0,
+        "delta_containers_por_ciclo": 0.046
+      },
       {
         "versao": "previsao_m2",
         "modelo": "M_gb_quantil",
@@ -1021,28 +1433,6 @@
         "delta_falta_%_demanda": -0.723,
         "delta_meses_codigo_com_falta_por_ciclo": -0.5,
         "delta_containers_por_ciclo": 0.028
-      },
-      {
-        "versao": "previsao_m2",
-        "modelo": "M_gb_quantil",
-        "contra": "ref_media3",
-        "delta_sobra_m2_por_ciclo": 798.982,
-        "delta_falta_m2_por_ciclo": -499.069,
-        "delta_sobra_%_demanda": 9.031,
-        "delta_falta_%_demanda": -5.641,
-        "delta_meses_codigo_com_falta_por_ciclo": -7.0,
-        "delta_containers_por_ciclo": 0.014
-      },
-      {
-        "versao": "pedido_bobinas_com_piso",
-        "modelo": "M_gb_quantil",
-        "contra": "ref_media3",
-        "delta_sobra_m2_por_ciclo": 4067.235,
-        "delta_falta_m2_por_ciclo": -252.515,
-        "delta_sobra_%_demanda": 45.971,
-        "delta_falta_%_demanda": -2.854,
-        "delta_meses_codigo_com_falta_por_ciclo": -1.0,
-        "delta_containers_por_ciclo": 0.046
       }
     ],
     "linhas_teste_sem_m2_por_bobina": "amostra: média do container",
@@ -1061,17 +1451,17 @@
         "alta": {
           "linhas": 27,
           "codigos": 15,
+          "B0_media3": {
+            "pinball_rel_%": 26.559,
+            "vies_%": 43.927,
+            "cobertura_%": 74.074,
+            "parcela_custo_falta_%": 80.109
+          },
           "B0_p75_6": {
             "pinball_rel_%": 30.727,
             "vies_%": 50.462,
             "cobertura_%": 77.778,
             "parcela_custo_falta_%": 80.251
-          },
-          "ref_media3": {
-            "pinball_rel_%": 26.559,
-            "vies_%": 43.927,
-            "cobertura_%": 74.074,
-            "parcela_custo_falta_%": 80.109
           },
           "M_gb_quantil": {
             "pinball_rel_%": 26.312,
@@ -1084,17 +1474,17 @@
         "baixa": {
           "linhas": 27,
           "codigos": 14,
+          "B0_media3": {
+            "pinball_rel_%": 27.874,
+            "vies_%": 12.384,
+            "cobertura_%": 51.852,
+            "parcela_custo_falta_%": 91.117
+          },
           "B0_p75_6": {
             "pinball_rel_%": 19.671,
             "vies_%": 30.013,
             "cobertura_%": 74.074,
             "parcela_custo_falta_%": 81.611
-          },
-          "ref_media3": {
-            "pinball_rel_%": 27.874,
-            "vies_%": 12.384,
-            "cobertura_%": 51.852,
-            "parcela_custo_falta_%": 91.117
           },
           "M_gb_quantil": {
             "pinball_rel_%": 19.026,
@@ -1107,17 +1497,17 @@
         "media": {
           "linhas": 26,
           "codigos": 15,
+          "B0_media3": {
+            "pinball_rel_%": 33.919,
+            "vies_%": -0.97,
+            "cobertura_%": 61.538,
+            "parcela_custo_falta_%": 94.06
+          },
           "B0_p75_6": {
             "pinball_rel_%": 30.506,
             "vies_%": 23.901,
             "cobertura_%": 65.385,
             "parcela_custo_falta_%": 88.627
-          },
-          "ref_media3": {
-            "pinball_rel_%": 33.919,
-            "vies_%": -0.97,
-            "cobertura_%": 61.538,
-            "parcela_custo_falta_%": 94.06
           },
           "M_gb_quantil": {
             "pinball_rel_%": 30.831,
@@ -1132,17 +1522,17 @@
         "alto": {
           "linhas": 26,
           "codigos": 13,
+          "B0_media3": {
+            "pinball_rel_%": 28.404,
+            "vies_%": 40.014,
+            "cobertura_%": 73.077,
+            "parcela_custo_falta_%": 82.895
+          },
           "B0_p75_6": {
             "pinball_rel_%": 32.568,
             "vies_%": 47.026,
             "cobertura_%": 80.769,
             "parcela_custo_falta_%": 82.517
-          },
-          "ref_media3": {
-            "pinball_rel_%": 28.404,
-            "vies_%": 40.014,
-            "cobertura_%": 73.077,
-            "parcela_custo_falta_%": 82.895
           },
           "M_gb_quantil": {
             "pinball_rel_%": 28.404,
@@ -1155,17 +1545,17 @@
         "baixo": {
           "linhas": 26,
           "codigos": 13,
+          "B0_media3": {
+            "pinball_rel_%": 28.325,
+            "vies_%": 9.376,
+            "cobertura_%": 50.0,
+            "parcela_custo_falta_%": 91.873
+          },
           "B0_p75_6": {
             "pinball_rel_%": 19.419,
             "vies_%": 26.638,
             "cobertura_%": 73.077,
             "parcela_custo_falta_%": 83.284
-          },
-          "ref_media3": {
-            "pinball_rel_%": 28.325,
-            "vies_%": 9.376,
-            "cobertura_%": 50.0,
-            "parcela_custo_falta_%": 91.873
           },
           "M_gb_quantil": {
             "pinball_rel_%": 18.717,
@@ -1178,17 +1568,17 @@
         "medio": {
           "linhas": 28,
           "codigos": 14,
+          "B0_media3": {
+            "pinball_rel_%": 29.422,
+            "vies_%": 8.664,
+            "cobertura_%": 64.286,
+            "parcela_custo_falta_%": 92.11
+          },
           "B0_p75_6": {
             "pinball_rel_%": 26.02,
             "vies_%": 32.874,
             "cobertura_%": 64.286,
             "parcela_custo_falta_%": 84.386
-          },
-          "ref_media3": {
-            "pinball_rel_%": 29.422,
-            "vies_%": 8.664,
-            "cobertura_%": 64.286,
-            "parcela_custo_falta_%": 92.11
           },
           "M_gb_quantil": {
             "pinball_rel_%": 25.87,
@@ -1203,17 +1593,17 @@
         "longo_4m+": {
           "linhas": 80,
           "codigos": 40,
+          "B0_media3": {
+            "pinball_rel_%": 28.665,
+            "vies_%": 28.427,
+            "cobertura_%": 62.5,
+            "parcela_custo_falta_%": 86.903
+          },
           "B0_p75_6": {
             "pinball_rel_%": 29.421,
             "vies_%": 41.09,
             "cobertura_%": 72.5,
             "parcela_custo_falta_%": 83.024
-          },
-          "ref_media3": {
-            "pinball_rel_%": 28.665,
-            "vies_%": 28.427,
-            "cobertura_%": 62.5,
-            "parcela_custo_falta_%": 86.903
           },
           "M_gb_quantil": {
             "pinball_rel_%": 26.692,
@@ -1228,17 +1618,17 @@
         "sem_ruptura": {
           "linhas": 80,
           "codigos": 40,
+          "B0_media3": {
+            "pinball_rel_%": 28.665,
+            "vies_%": 28.427,
+            "cobertura_%": 62.5,
+            "parcela_custo_falta_%": 86.903
+          },
           "B0_p75_6": {
             "pinball_rel_%": 29.421,
             "vies_%": 41.09,
             "cobertura_%": 72.5,
             "parcela_custo_falta_%": 83.024
-          },
-          "ref_media3": {
-            "pinball_rel_%": 28.665,
-            "vies_%": 28.427,
-            "cobertura_%": 62.5,
-            "parcela_custo_falta_%": 86.903
           },
           "M_gb_quantil": {
             "pinball_rel_%": 26.692,
@@ -1253,17 +1643,17 @@
         "NA": {
           "linhas": 80,
           "codigos": 40,
+          "B0_media3": {
+            "pinball_rel_%": 28.665,
+            "vies_%": 28.427,
+            "cobertura_%": 62.5,
+            "parcela_custo_falta_%": 86.903
+          },
           "B0_p75_6": {
             "pinball_rel_%": 29.421,
             "vies_%": 41.09,
             "cobertura_%": 72.5,
             "parcela_custo_falta_%": 83.024
-          },
-          "ref_media3": {
-            "pinball_rel_%": 28.665,
-            "vies_%": 28.427,
-            "cobertura_%": 62.5,
-            "parcela_custo_falta_%": 86.903
           },
           "M_gb_quantil": {
             "pinball_rel_%": 26.692,
@@ -1278,17 +1668,17 @@
         "NA": {
           "linhas": 80,
           "codigos": 40,
+          "B0_media3": {
+            "pinball_rel_%": 28.665,
+            "vies_%": 28.427,
+            "cobertura_%": 62.5,
+            "parcela_custo_falta_%": 86.903
+          },
           "B0_p75_6": {
             "pinball_rel_%": 29.421,
             "vies_%": 41.09,
             "cobertura_%": 72.5,
             "parcela_custo_falta_%": 83.024
-          },
-          "ref_media3": {
-            "pinball_rel_%": 28.665,
-            "vies_%": 28.427,
-            "cobertura_%": 62.5,
-            "parcela_custo_falta_%": 86.903
           },
           "M_gb_quantil": {
             "pinball_rel_%": 26.692,

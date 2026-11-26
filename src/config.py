@@ -99,7 +99,9 @@ SEMENTE = 42
 ARQUIVO_PRODUTOS = "produtos.csv"   # atributos fixos: largura, linha, acabamento, marca
 
 # ---------------------------------------------------------------- Entrega 6
-# Baseline B0 = regra P75 de 6 meses (coluna p75_6 do modelo). τ principal = QUANTIL_OPERACIONAL.
+# B0 principal = média dos 3 últimos meses fechados ("Giro Média 30 à 90" do Sankhya, confirmada na
+# devolutiva de 23–25/11). P75 de 6 meses = baseline da E04/E05, mantido para comparação.
+BASES_B0 = {"media3": "media_3", "p75_6": "p75_6"}   # nome -> coluna da tabela de features
 TAUS_SENSIBILIDADE = [0.6, 0.9]
 # Grades da busca por CV temporal (seção 5 do relatório). y em m² e features padronizadas:
 # a penalidade L1 do QuantileRegressor soma alpha × |coef em m²| à perda média em m².
